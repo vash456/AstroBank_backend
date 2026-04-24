@@ -6,6 +6,10 @@ public class CuentaAhorros extends Cuenta{
 
     private double tasaInteres;
 
+    public CuentaAhorros(String numeroCuenta, Cliente propietario, EstadoCuenta estadoCuenta, double saldo, double tasaInteres) {
+        super(numeroCuenta, propietario, estadoCuenta, saldo);
+        this.tasaInteres = tasaInteres;
+    }
 
     public void aplicarIntereses(){}
 
@@ -45,5 +49,24 @@ public class CuentaAhorros extends Cuenta{
     @Override
     public void consignar(double monto) {
         super.consignar(monto);
+    }
+
+    public double getTasaInteres() {
+        return tasaInteres;
+    }
+
+    public void setTasaInteres(double tasaInteres) {
+        this.tasaInteres = tasaInteres;
+    }
+
+    @Override
+    public String toString() {
+        return "\nCuentaAhorros:" +
+                "\n\tnumeroCuenta='" + numeroCuenta + '\'' +
+                "\n\tsaldo=" + saldo +
+                "\n\ttasaInteres=" + tasaInteres +
+                "\n\tpropietario=" + propietario.getNombreCompleto() +
+                "\n\testadoCuenta=" + estadoCuenta +
+                "\n\tfechaApertura='" + fechaApertura + '\'';
     }
 }

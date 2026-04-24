@@ -1,6 +1,7 @@
 package astrobankapp.userinterface;
 
 import astrobankapp.domain.Cliente;
+import astrobankapp.domain.Cuenta;
 import astrobankapp.exception.ValidationException;
 import astrobankapp.utils.ClienteFormularioValidacion;
 import astrobankapp.view.ClienteView;
@@ -67,7 +68,7 @@ public class MenuApp {
         while (initCliente != 0){
             System.out.println("""
                 \nQue desea hacer?
-                1. Consultar saldo
+                1. Consultar saldos
                 2. Consignar
                 3. Retirar
                 4. Transferir
@@ -81,6 +82,9 @@ public class MenuApp {
             switch (opcionCliente){
                 case 1:
                     System.out.println("Saldos:");
+                    for (Cuenta cuenta:cliente.getCuentas()){
+                        System.out.println(cuenta.toString());
+                    }
                     break;
                 case 2:
                     mostrarMenuCuentas();

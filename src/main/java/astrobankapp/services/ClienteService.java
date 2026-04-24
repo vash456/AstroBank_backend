@@ -10,5 +10,7 @@ public interface ClienteService {
     public Optional<Cliente> getClienteByEmail(String email);
     public Cliente actualizarCliente(int id);
     public void borrarCliente(int id);
+    void iniciarlizarCliente(Cliente cliente);
     public Cliente autenticar();
+
 }
