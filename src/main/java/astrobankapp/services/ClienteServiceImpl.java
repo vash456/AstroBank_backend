@@ -1,12 +1,13 @@
 package astrobankapp.services;
 
-import astrobankapp.domain.Cliente;
+import astrobankapp.domain.*;
 import astrobankapp.exception.AuthenticationException;
 import astrobankapp.exception.UserAlreadyExistsException;
 import astrobankapp.exception.UserNotFoundException;
 import astrobankapp.repository.ClienteRepository;
 import astrobankapp.utils.ClienteFormularioValidacion;
 
+import java.time.Instant;
 import java.util.Optional;
 
 public class ClienteServiceImpl implements ClienteService{
@@ -17,8 +18,22 @@ public class ClienteServiceImpl implements ClienteService{
         this.clienteRepository = clienteRepository;
     }
 
-    public void iniciarlizarCliente(Cliente cliente){
+    public String obtenerNumeroUnico(){
+        long segundosUnicos = Instant.now().getEpochSecond();
+        return String.valueOf(segundosUnicos);
+    }
 
+    @Override
+    public void iniciarlizarCliente(Cliente cliente){
+        String numeroCuentaAhorros = "CA-" + obtenerNumeroUnico();
+        CuentaAhorros cuentaAhorros = new CuentaAhorros(numeroCuentaAhorros, cliente, EstadoCuenta.ACTIVA, 0, 1.5);
+        String numeroCuentaCorriente = "CC-" + obtenerNumeroUnico();
+        CuentaCorriente cuentaCorriente = new CuentaCorriente(numeroCuentaCorriente, cliente, EstadoCuenta.ACTIVA,0, 20, 500000);
+        String numeroTarjetaCredito = "TC-" + obtenerNumeroUnico();
+        TarjetaCredito tarjetaCredito = new TarjetaCredito(numeroTarjetaCredito, cliente, EstadoCuenta.ACTIVA, 0, 3000000, 0, 12);
+        cliente.agregarCuenta(cuentaAhorros);
+        cliente.agregarCuenta(cuentaCorriente);
+        cliente.agregarCuenta(tarjetaCredito);
     }
 
     @Override
@@ -80,7 +95,7 @@ public class ClienteServiceImpl implements ClienteService{
         cliente.setIntentosFallidos(0);
         cliente.setBloqueado(false);
 
-
+        iniciarlizarCliente(cliente);
 
         System.out.println("Usuario registrado exitosamente ✅");
         return clienteRepository.guardarCliente(cliente);

@@ -8,6 +8,12 @@ public class CuentaCorriente extends Cuenta{
 
     public void calcularLimiteSobregiro(){}
 
+    public CuentaCorriente(String numeroCuenta, Cliente propietario, EstadoCuenta estadoCuenta, double saldo, double porcentajeSobregiro, double limiteSobregiro) {
+        super(numeroCuenta, propietario, estadoCuenta, saldo);
+        this.porcentajeSobregiro = porcentajeSobregiro;
+        this.limiteSobregiro = limiteSobregiro;
+    }
+
     @Override
     public double consultarSaldo() {
         return super.consultarSaldo();
@@ -40,5 +46,17 @@ public class CuentaCorriente extends Cuenta{
     @Override
     public boolean validarDestino(Cuenta cuenta) {
         return super.validarDestino(cuenta);
+    }
+
+    @Override
+    public String toString() {
+        return "\nCuentaCorriente:" +
+                "\n\tnumeroCuenta = '" + numeroCuenta + '\'' +
+                "\n\tsaldo = " + saldo +
+                "\n\tporcentajeSobregiro = " + porcentajeSobregiro +
+                "\n\tlimiteSobregiro = " + limiteSobregiro +
+                "\n\tpropietario = " + propietario.getNombreCompleto() +
+                "\n\testadoCuenta = " + estadoCuenta +
+                "\n\tfechaApertura = '" + fechaApertura + '\'';
     }
 }

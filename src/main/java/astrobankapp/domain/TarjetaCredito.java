@@ -19,7 +19,12 @@ public class TarjetaCredito extends Cuenta{
         return 0;
     }
 
-
+    public TarjetaCredito(String numeroCuenta, Cliente propietario, EstadoCuenta estadoCuenta, double saldo, double cupo, double deuda, int numeroCuotas) {
+        super(numeroCuenta, propietario, estadoCuenta, saldo);
+        this.cupo = cupo;
+        this.deuda = deuda;
+        this.numeroCuotas = numeroCuotas;
+    }
 
     @Override
     public double consultarSaldo() {
@@ -53,5 +58,16 @@ public class TarjetaCredito extends Cuenta{
     @Override
     public boolean validarDestino(Cuenta cuenta) {
         return super.validarDestino(cuenta);
+    }
+
+    @Override
+    public String toString() {
+        return "\nTarjetaCredito:" +
+                "\n\tnumeroCuenta = '" + numeroCuenta + '\'' +
+                "\n\tcupo = " + cupo +
+                "\n\tdeuda = " + deuda +
+                "\n\tpropietario = " + propietario.getNombreCompleto() +
+                "\n\testadoCuenta = " + estadoCuenta +
+                "\n\tfechaApertura = '" + fechaApertura + '\'';
     }
 }
