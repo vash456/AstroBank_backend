@@ -3,12 +3,14 @@ package astrobankapp.domain;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Cuenta {
-    private String numeroCuenta;
-    private double saldo;
-    private String fechaApertura;
-    private String estadoCuenta;
-    private ArrayList<Movimiento> movimientos;
+public abstract class Cuenta implements Transferible, Transaccion {
+    protected String numeroCuenta;
+    protected double saldo;
+    protected String fechaApertura;
+    protected String estadoCuenta;
+    protected ArrayList<Movimiento> movimientos;
+
+    protected Cliente propietario;
 
     public double consultarSaldo(){
         return this.saldo;
@@ -22,5 +24,15 @@ public class Cuenta {
         return null;
     }
 
-    public void registrarMovimiento(Movimiento movimiento){}
+    public abstract void registrarMovimiento(Movimiento movimiento);
+
+    @Override
+    public void transferir(Cuenta cuentaDestino, double monto){
+
+    }
+
+    @Override
+    public boolean validarDestino(Cuenta cuenta){
+        return false;
+    }
 }
