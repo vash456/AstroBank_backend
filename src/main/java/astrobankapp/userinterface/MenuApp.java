@@ -44,7 +44,7 @@ public class MenuApp {
                     System.out.println("Inicio sesion");
                     try {
                         Cliente cliente = clienteView.autenticar();
-
+                        mostrarMenuCliente(cliente);
                     }catch (ValidationException e) {
                         // Aquí capturas cualquiera de las excepciones porque todas heredan de ValidationException
                         System.out.println("Error de validación: " + e.getMessage() + " ❌");
@@ -62,11 +62,11 @@ public class MenuApp {
         }
     }
 
-    public void mostrarMenuCliente(){
+    public void mostrarMenuCliente(Cliente cliente){
         int initCliente = 1;
         while (initCliente != 0){
             System.out.println("""
-                Que desea hacer?
+                \nQue desea hacer?
                 1. Consultar saldo
                 2. Consignar
                 3. Retirar
@@ -84,6 +84,9 @@ public class MenuApp {
                     break;
                 case 2:
                     mostrarMenuCuentas();
+                    break;
+                case 8:
+                    System.out.println(cliente.toString());
                     break;
                 case 9:
                     initCliente = 0;

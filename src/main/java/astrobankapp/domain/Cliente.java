@@ -71,6 +71,16 @@ public class Cliente implements Autenticable{
 
     }
 
+    @Override
+    public String toString() {
+        return "\nCliente:" +
+                "\n\tnombreCompleto = '" + nombreCompleto + '\'' +
+                "\n\tusuario = '" + usuario + '\'' +
+                "\n\tidentificacion = '" + identificacion + '\'' +
+                "\n\tcorreo = '" + correo + '\'' +
+                "\n\tcelular = '" + celular + '\'';
+    }
+
     // Setters and Getters
 
     public int getId() {
