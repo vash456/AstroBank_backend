@@ -5,7 +5,7 @@ import astrobankapp.exception.AuthenticationException;
 import astrobankapp.exception.UserAlreadyExistsException;
 import astrobankapp.exception.UserNotFoundException;
 import astrobankapp.repository.ClienteRepository;
-import astrobankapp.utils.ClienteFormularioValidacion;
+import astrobankapp.utils.FormularioValidacion;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -38,9 +38,9 @@ public class ClienteServiceImpl implements ClienteService{
 
     @Override
     public Cliente autenticar(){
-        String usuario = ClienteFormularioValidacion.validateString("Ingrese el usuario:");
-        String contrasena = ClienteFormularioValidacion.validateString("Ingrese la Contraseña:");
-        ClienteFormularioValidacion.validateLoginForm(usuario,contrasena);
+        String usuario = FormularioValidacion.validateString("Ingrese el usuario:");
+        String contrasena = FormularioValidacion.validateString("Ingrese la Contraseña:");
+        FormularioValidacion.validateLoginForm(usuario,contrasena);
         Cliente cliente = clienteRepository.buscarPorUsuario(usuario);
         if (!cliente.autenticar(usuario,contrasena))
             throw new AuthenticationException("Usuario o contraseña incorrectos.");
@@ -55,11 +55,11 @@ public class ClienteServiceImpl implements ClienteService{
         Cliente cliente = new Cliente();
         cliente.setId(clienteRepository.cantidadListaCliente()+1);
 
-        String identificacion = ClienteFormularioValidacion.validateString("Ingrese la Identificacion:");
+        String identificacion = FormularioValidacion.validateString("Ingrese la Identificacion:");
 
-        String nombreCompleto = ClienteFormularioValidacion.validateString("Ingrese su nombre completo:");
+        String nombreCompleto = FormularioValidacion.validateString("Ingrese su nombre completo:");
 
-        String usuario = ClienteFormularioValidacion.validateString("Ingrese el Usuario");
+        String usuario = FormularioValidacion.validateString("Ingrese el Usuario");
 
         try {
             clienteRepository.buscarPorUsuario(usuario);
@@ -69,15 +69,15 @@ public class ClienteServiceImpl implements ClienteService{
             System.out.println("El usuario está disponible.");
         }
 
-        String celular = ClienteFormularioValidacion.validateString("Ingrese su celular:");
+        String celular = FormularioValidacion.validateString("Ingrese su celular:");
 
-        String correo = ClienteFormularioValidacion.validateString("Ingrese su correo:");
+        String correo = FormularioValidacion.validateString("Ingrese su correo:");
 
-        String contrasena = ClienteFormularioValidacion.validateString("Ingrese la contraseña:");
+        String contrasena = FormularioValidacion.validateString("Ingrese la contraseña:");
 
-        String confirmarContrasena = ClienteFormularioValidacion.validateString("Confirme la contraseña:");
+        String confirmarContrasena = FormularioValidacion.validateString("Confirme la contraseña:");
 
-        ClienteFormularioValidacion.validateCustomerForm(
+        FormularioValidacion.validateCustomerForm(
                 identificacion,
                 nombreCompleto,
                 usuario,

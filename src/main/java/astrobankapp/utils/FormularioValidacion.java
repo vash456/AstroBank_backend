@@ -5,7 +5,7 @@ import astrobankapp.exception.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class ClienteFormularioValidacion {
+public class FormularioValidacion {
     static Scanner sc = new Scanner(System.in);
 
     public static String validateString(String prompt) throws InputMismatchException {
@@ -55,6 +55,12 @@ public class ClienteFormularioValidacion {
                 System.out.println("Error al ingresar el valor, este debe ser un numero entero");
                 sc.nextLine();
             }
+        }
+    }
+
+    public static void validatePositiveAmount(double amount) {
+        if (amount <= 0) {
+            throw new InvalidAmountException("El monto debe ser mayor a cero. Valor recibido: " + amount);
         }
     }
 

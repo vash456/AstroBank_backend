@@ -1,8 +1,14 @@
 package astrobankapp.domain;
 
+import astrobankapp.exception.AccountMismatchException;
+import astrobankapp.utils.FormularioValidacion;
+
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 public abstract class Cuenta implements Transferible, Transaccion {
     protected String numeroCuenta;
@@ -18,7 +24,7 @@ public abstract class Cuenta implements Transferible, Transaccion {
         this.propietario = propietario;
         this.movimientos = new ArrayList<>();
         this.estadoCuenta = estadoCuenta;
-        this.fechaApertura = LocalDateTime.now().toString();
+        this.fechaApertura = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));;
         this.saldo = saldo;
     }
 
@@ -26,15 +32,27 @@ public abstract class Cuenta implements Transferible, Transaccion {
         return this.saldo;
     }
 
-    public void consignar(double monto){}
-
-    public void retirar(double monto){}
-
-    public ArrayList<Movimiento> obtenerMovimientos(){
-        return null;
+    public void consignar(double monto){
+        FormularioValidacion.validatePositiveAmount(monto);
+        if (this.estadoCuenta != EstadoCuenta.ACTIVA){
+            throw new IllegalStateException();
+        }
+        this.saldo += monto;
+        registrarMovimiento(new Movimiento(
+                TipoMovimiento.CONSIGNACION, monto, saldo,
+                "Consignación de $" + monto));
+        System.out.println("Consignacion exitosa ✅");
     }
 
-    public abstract void registrarMovimiento(Movimiento movimiento);
+    public abstract void retirar(double monto);
+
+    public ArrayList<Movimiento> obtenerMovimientos(){
+        return new ArrayList<>(this.movimientos);
+    }
+
+    public void registrarMovimiento(Movimiento movimiento){
+        this.movimientos.add(movimiento);
+    };
 
     @Override
     public void transferir(Cuenta cuentaDestino, double monto){
@@ -42,7 +60,21 @@ public abstract class Cuenta implements Transferible, Transaccion {
     }
 
     @Override
-    public boolean validarDestino(Cuenta cuenta){
-        return false;
+    public boolean validarDestino(Cuenta cuentaDestino){
+        if (cuentaDestino.estadoCuenta != EstadoCuenta.ACTIVA){
+            throw new IllegalStateException();
+        }
+        if (this.numeroCuenta.equals(cuentaDestino.numeroCuenta)){
+            throw new AccountMismatchException(cuentaDestino.numeroCuenta);
+        }
+        return true;
+    }
+
+    public String getNumeroCuenta() {
+        return numeroCuenta;
+    }
+
+    public EstadoCuenta getEstadoCuenta() {
+        return estadoCuenta;
     }
 }

@@ -1,5 +1,8 @@
 package astrobankapp.domain;
 
+import astrobankapp.exception.InvalidAmountException;
+import astrobankapp.utils.FormularioValidacion;
+
 import java.util.ArrayList;
 
 public class CuentaCorriente extends Cuenta{
@@ -31,11 +34,22 @@ public class CuentaCorriente extends Cuenta{
 
     @Override
     public void retirar(double monto) {
-        super.retirar(monto);
+        double sobregiro = this.saldo * (this.porcentajeSobregiro / 100);
+        FormularioValidacion.validatePositiveAmount(monto);
+        if ((this.saldo + this.limiteSobregiro) < monto)
+            throw new InvalidAmountException("Supera el límite de sobregiro");
+        if ((this.saldo + sobregiro) < monto)
+            throw new InvalidAmountException("Supera el porcentaje de sobregiro");
+        this.saldo -= monto;
+        registrarMovimiento(new Movimiento(
+                TipoMovimiento.RETIRO, monto, this.saldo,
+                "Retiro de $" + monto));
+        System.out.println("Retiro exitoso ✅");
     }
 
     @Override
     public void registrarMovimiento(Movimiento movimiento) {
+        super.registrarMovimiento(movimiento);
     }
 
     @Override
@@ -58,5 +72,13 @@ public class CuentaCorriente extends Cuenta{
                 "\n\tpropietario = " + propietario.getNombreCompleto() +
                 "\n\testadoCuenta = " + estadoCuenta +
                 "\n\tfechaApertura = '" + fechaApertura + '\'';
+    }
+
+    public double getPorcentajeSobregiro() {
+        return porcentajeSobregiro;
+    }
+
+    public double getLimiteSobregiro() {
+        return limiteSobregiro;
     }
 }

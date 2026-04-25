@@ -19,7 +19,7 @@ public class Cliente implements Autenticable{
     private List<Cuenta> cuentas;
 
     public Cliente(){
-        this.cuentas = new ArrayList<>();
+        this.cuentas = new ArrayList<Cuenta>();
     }
 
     public Cliente(int id, String contrasena, String celular, String correo, String usuario, String nombreCompleto, String identificacion) {

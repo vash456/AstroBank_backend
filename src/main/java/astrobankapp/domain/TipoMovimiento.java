@@ -6,5 +6,6 @@ public enum TipoMovimiento {
     TRANSFERENCIA_OUT,
     TRANSFERENCIA_IN,
     COMPRAR_TC,
-    PAGO_TC
+    PAGO_TC,
+    INTERES
 }
