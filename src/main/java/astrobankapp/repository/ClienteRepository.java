@@ -28,4 +28,8 @@ public class ClienteRepository {
         }
         throw new UserNotFoundException(nombreUsuario);
     }
+
+    public List<Cliente> getClientes() {
+        return clientes;
+    }
 }
