@@ -56,7 +56,21 @@ public abstract class Cuenta implements Transferible, Transaccion {
 
     @Override
     public void transferir(Cuenta cuentaDestino, double monto){
+        if (!validarDestino(cuentaDestino))
+            throw new IllegalArgumentException("Cuenta destino inválida");
 
+        this.retirar(monto);
+        cuentaDestino.consignar(monto);
+
+        // Movimiento adicional que identifica la transferencia
+        registrarMovimiento(new Movimiento(
+                TipoMovimiento.TRANSFERENCIA_OUT, monto, saldo,
+                "Transferencia a cuenta " + cuentaDestino.numeroCuenta));
+
+        cuentaDestino.registrarMovimiento(new Movimiento(
+                TipoMovimiento.TRANSFERENCIA_IN, monto, cuentaDestino.saldo,
+                "Transferencia desde cuenta " + this.numeroCuenta));
+        System.out.println("Transferencia exitosa ✅");
     }
 
     @Override
@@ -65,7 +79,7 @@ public abstract class Cuenta implements Transferible, Transaccion {
             throw new IllegalStateException();
         }
         if (this.numeroCuenta.equals(cuentaDestino.numeroCuenta)){
-            throw new AccountMismatchException(cuentaDestino.numeroCuenta);
+            throw new AccountMismatchException("Cuenta destino '" + cuentaDestino.numeroCuenta + "' invalida");
         }
         return true;
     }

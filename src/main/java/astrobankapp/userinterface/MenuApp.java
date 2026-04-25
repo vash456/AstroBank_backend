@@ -7,6 +7,7 @@ import astrobankapp.domain.TarjetaCredito;
 import astrobankapp.exception.ValidationException;
 import astrobankapp.utils.FormularioValidacion;
 import astrobankapp.view.ClienteView;
+import astrobankapp.view.CuentaView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +16,11 @@ import java.util.Scanner;
 public class MenuApp {
     Scanner sc = new Scanner(System.in);
     private final ClienteView clienteView;
+    private final CuentaView cuentaView;
 
-    public MenuApp(ClienteView clienteView){
+    public MenuApp(ClienteView clienteView, CuentaView cuentaView){
         this.clienteView = clienteView;
+        this.cuentaView = cuentaView;
     }
 
     public void mostrarMenuPrincipal(){
@@ -118,6 +121,20 @@ public class MenuApp {
                         Cuenta cuentaSeleccionada = seleccionarCuenta((ArrayList<Cuenta>) cliente.getCuentas(),true);
                         double monto = FormularioValidacion.validateDouble("Ingrese el monto: ");
                         cuentaSeleccionada.retirar(monto);
+                    }catch (ValidationException e) {
+                        System.out.println("Error de validación: " + e.getMessage() + " ❌");
+                    } catch (Exception e) {
+                        System.out.println("Error inesperado del sistema. ❌");
+                    }
+                    break;
+                case 4:
+                    try {
+                        System.out.println("Transferir:");
+                        Cuenta cuentaSeleccionada = seleccionarCuenta((ArrayList<Cuenta>) cliente.getCuentas(),true);
+                        System.out.println("Cuenta Destino");
+                        Cuenta cuentaDestino = cuentaView.buscarPorNumeroCuenta();
+                        double monto = FormularioValidacion.validateDouble("Ingrese el monto:");
+                        cuentaSeleccionada.transferir(cuentaDestino,monto);
                     }catch (ValidationException e) {
                         System.out.println("Error de validación: " + e.getMessage() + " ❌");
                     } catch (Exception e) {
