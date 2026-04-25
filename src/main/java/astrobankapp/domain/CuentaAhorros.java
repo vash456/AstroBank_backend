@@ -1,5 +1,8 @@
 package astrobankapp.domain;
 
+import astrobankapp.exception.InvalidAmountException;
+import astrobankapp.utils.FormularioValidacion;
+
 import java.util.ArrayList;
 
 public class CuentaAhorros extends Cuenta{
@@ -11,15 +14,30 @@ public class CuentaAhorros extends Cuenta{
         this.tasaInteres = tasaInteres;
     }
 
-    public void aplicarIntereses(){}
+    public void aplicarIntereses(){
+        double intereses = calcularIntereses();
+        this.saldo += intereses;
+        registrarMovimiento(new Movimiento(
+                TipoMovimiento.INTERES, intereses, saldo,
+                "Intereses aplicados (tasa: " + tasaInteres + ")"));
+    }
 
     public double calcularIntereses(){
-        return 0;
+        return this.saldo * (this.tasaInteres / 100);
     }
 
     @Override
     public void retirar(double monto){
-
+        FormularioValidacion.validatePositiveAmount(monto);
+        if (saldo < monto){
+            throw new InvalidAmountException("Saldo insuficiente");
+        }
+        this.saldo -= monto;
+        aplicarIntereses();
+        registrarMovimiento(new Movimiento(
+                TipoMovimiento.RETIRO, monto, this.saldo,
+                "Retiro de $" + monto));
+        System.out.println("Retiro exitoso ✅");
     }
 
     @Override
@@ -39,6 +57,7 @@ public class CuentaAhorros extends Cuenta{
 
     @Override
     public void registrarMovimiento(Movimiento movimiento) {
+        super.registrarMovimiento(movimiento);
     }
 
     @Override
@@ -51,13 +70,6 @@ public class CuentaAhorros extends Cuenta{
         super.consignar(monto);
     }
 
-    public double getTasaInteres() {
-        return tasaInteres;
-    }
-
-    public void setTasaInteres(double tasaInteres) {
-        this.tasaInteres = tasaInteres;
-    }
 
     @Override
     public String toString() {
@@ -69,4 +81,7 @@ public class CuentaAhorros extends Cuenta{
                 "\n\testadoCuenta=" + estadoCuenta +
                 "\n\tfechaApertura='" + fechaApertura + '\'';
     }
+
+    public double getTasaInteres() { return tasaInteres; }
+
 }

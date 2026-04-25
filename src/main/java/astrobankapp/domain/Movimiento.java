@@ -1,5 +1,8 @@
 package astrobankapp.domain;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Movimiento {
     private int id;
     private String fechaHora;
@@ -7,4 +10,30 @@ public class Movimiento {
     private double valor;
     private double saldoPosterior;
     private String descripcion;
+
+    // Contador estático para generar IDs únicos automáticamente
+    private static int contadorId = 1;
+
+    public Movimiento(TipoMovimiento tipo, double valor,
+                      double saldoPosterior, String descripcion) {
+        this.id = contadorId++;
+        this.fechaHora = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.tipo = tipo;
+        this.valor = valor;
+        this.saldoPosterior = saldoPosterior;
+        this.descripcion = descripcion;
+    }
+
+    public int getId() { return id; }
+    public String getFechaHora() { return fechaHora; }
+    public TipoMovimiento getTipo() { return tipo; }
+    public double getValor() { return valor; }
+    public double getSaldoPosterior() { return saldoPosterior; }
+    public String getDescripcion() { return descripcion; }
+
+    @Override
+    public String toString() {
+        return String.format("[%d] %s | %s | $%.2f | Saldo: $%.2f | %s",
+                id, fechaHora, tipo, valor, saldoPosterior, descripcion);
+    }
 }

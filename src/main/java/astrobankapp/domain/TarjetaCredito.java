@@ -38,7 +38,7 @@ public class TarjetaCredito extends Cuenta{
 
     @Override
     public void retirar(double monto) {
-        super.retirar(monto);
+
     }
 
     @Override
