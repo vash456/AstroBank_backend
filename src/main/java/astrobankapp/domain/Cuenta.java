@@ -54,6 +54,19 @@ public abstract class Cuenta implements Transferible, Transaccion {
         this.movimientos.add(movimiento);
     };
 
+
+    @Override
+    public boolean validarDestino(Cuenta cuentaDestino){
+        if (cuentaDestino.estadoCuenta != EstadoCuenta.ACTIVA){
+            throw new IllegalStateException();
+        }
+        if (this.numeroCuenta.equals(cuentaDestino.numeroCuenta)){
+            throw new AccountMismatchException("Cuenta destino '" + cuentaDestino.numeroCuenta + "' invalida");
+        }
+        return true;
+    }
+
+
     @Override
     public void transferir(Cuenta cuentaDestino, double monto){
         if (!validarDestino(cuentaDestino))
@@ -71,17 +84,6 @@ public abstract class Cuenta implements Transferible, Transaccion {
                 TipoMovimiento.TRANSFERENCIA_IN, monto, cuentaDestino.saldo,
                 "Transferencia desde cuenta " + this.numeroCuenta));
         System.out.println("Transferencia exitosa ✅");
-    }
-
-    @Override
-    public boolean validarDestino(Cuenta cuentaDestino){
-        if (cuentaDestino.estadoCuenta != EstadoCuenta.ACTIVA){
-            throw new IllegalStateException();
-        }
-        if (this.numeroCuenta.equals(cuentaDestino.numeroCuenta)){
-            throw new AccountMismatchException("Cuenta destino '" + cuentaDestino.numeroCuenta + "' invalida");
-        }
-        return true;
     }
 
     public String getNumeroCuenta() {

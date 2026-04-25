@@ -5,6 +5,7 @@ import astrobankapp.services.CuentaService;
 import astrobankapp.utils.FormularioValidacion;
 
 public class CuentaView {
+    
     private final CuentaService cuentaService;
 
     public CuentaView(CuentaService cuentaService) {

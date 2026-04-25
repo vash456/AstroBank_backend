@@ -97,10 +97,6 @@ public class MenuApp {
                     } catch (Exception e) {
                         System.out.println("Error inesperado del sistema. ❌");
                     }
-
-                    //  for (Cuenta cuenta:cliente.getCuentas()){
-                    //      System.out.println(cuenta.toString());
-                    //  }
                     break;
                 case 2:
                     try {
@@ -113,7 +109,6 @@ public class MenuApp {
                     } catch (Exception e) {
                         System.out.println("Error inesperado del sistema. ❌");
                     }
-
                     break;
                 case 3:
                     try {
@@ -127,6 +122,7 @@ public class MenuApp {
                         System.out.println("Error inesperado del sistema. ❌");
                     }
                     break;
+
                 case 4:
                     try {
                         System.out.println("Transferir:");
@@ -141,6 +137,7 @@ public class MenuApp {
                         System.out.println("Error inesperado del sistema. ❌");
                     }
                     break;
+
                 case 7:
                     try {
                         System.out.println("Consultar Movimientos:");
@@ -154,9 +151,11 @@ public class MenuApp {
                         System.out.println("Error inesperado del sistema. ❌" + e.getMessage());
                     }
                     break;
+
                 case 8:
                     System.out.println(cliente.toString());
                     break;
+
                 case 9:
                     initCliente = 0;
                     break;

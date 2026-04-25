@@ -15,9 +15,9 @@ public class CuentaServiceImpl implements CuentaService{
         this.clienteRepository = clienteRepository;
     }
 
+
     @Override
     public Cuenta buscarPorNumeroCuenta(String numeroCuenta) {
-
         ArrayList<Cliente> clientes = (ArrayList<Cliente>) clienteRepository.getClientes();
         for (Cliente cliente: clientes){
             for (Cuenta c : cliente.getCuentas()) {
@@ -26,7 +26,6 @@ public class CuentaServiceImpl implements CuentaService{
                 }
             }
         }
-
         throw new AccountMismatchException("⚠ No se encontró ninguna cuenta con el número: " + numeroCuenta);
     }
 
