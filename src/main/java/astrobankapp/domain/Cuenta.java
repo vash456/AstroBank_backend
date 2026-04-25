@@ -46,15 +46,6 @@ public abstract class Cuenta implements Transferible, Transaccion {
 
     public abstract void retirar(double monto);
 
-    public ArrayList<Movimiento> obtenerMovimientos(){
-        return new ArrayList<>(this.movimientos);
-    }
-
-    public void registrarMovimiento(Movimiento movimiento){
-        this.movimientos.add(movimiento);
-    };
-
-
     @Override
     public boolean validarDestino(Cuenta cuentaDestino){
         if (cuentaDestino.estadoCuenta != EstadoCuenta.ACTIVA){
@@ -66,6 +57,13 @@ public abstract class Cuenta implements Transferible, Transaccion {
         return true;
     }
 
+    public ArrayList<Movimiento> obtenerMovimientos(){
+        return new ArrayList<>(this.movimientos);
+    }
+
+    public void registrarMovimiento(Movimiento movimiento){
+        this.movimientos.add(movimiento);
+    };
 
     @Override
     public void transferir(Cuenta cuentaDestino, double monto){
