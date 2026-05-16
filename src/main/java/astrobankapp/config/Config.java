@@ -1,7 +1,7 @@
 package astrobankapp.config;
 
 import astrobankapp.domain.Cliente;
-import astrobankapp.repository.ClienteRepository;
+import astrobankapp.persistence.repository.ClienteRepository;
 import astrobankapp.services.ClienteService;
 import astrobankapp.services.ClienteServiceImpl;
 import astrobankapp.services.CuentaService;

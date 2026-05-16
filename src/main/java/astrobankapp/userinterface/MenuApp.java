@@ -5,6 +5,7 @@ import astrobankapp.domain.Cuenta;
 import astrobankapp.domain.Movimiento;
 import astrobankapp.domain.TarjetaCredito;
 import astrobankapp.exception.ValidationException;
+import astrobankapp.persistence.database.DataBaseConnectionMySql;
 import astrobankapp.utils.FormularioValidacion;
 import astrobankapp.view.ClienteView;
 import astrobankapp.view.CuentaView;
@@ -25,6 +26,7 @@ public class MenuApp {
 
     public void mostrarMenuPrincipal(){
         System.out.println("Bienvenido a AstroBank ⭐");
+        DataBaseConnectionMySql.getInstance().getConnection();
 
         int init = 1;
         while (init != 0){

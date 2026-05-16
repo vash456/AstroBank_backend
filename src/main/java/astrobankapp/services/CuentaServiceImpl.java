@@ -3,7 +3,7 @@ package astrobankapp.services;
 import astrobankapp.domain.Cliente;
 import astrobankapp.domain.Cuenta;
 import astrobankapp.exception.AccountMismatchException;
-import astrobankapp.repository.ClienteRepository;
+import astrobankapp.persistence.repository.ClienteRepository;
 
 import java.util.ArrayList;
 

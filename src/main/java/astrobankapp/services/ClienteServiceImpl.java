@@ -4,7 +4,7 @@ import astrobankapp.domain.*;
 import astrobankapp.exception.AuthenticationException;
 import astrobankapp.exception.UserAlreadyExistsException;
 import astrobankapp.exception.UserNotFoundException;
-import astrobankapp.repository.ClienteRepository;
+import astrobankapp.persistence.repository.ClienteRepository;
 import astrobankapp.utils.FormularioValidacion;
 
 import java.time.Instant;

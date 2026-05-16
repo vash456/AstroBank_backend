@@ -1,4 +1,4 @@
-package astrobankapp.repository;
+package astrobankapp.persistence.repository;
 
 import astrobankapp.domain.Cliente;
 import astrobankapp.exception.UserNotFoundException;
