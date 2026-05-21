@@ -46,7 +46,7 @@ public class MenuApp {
                         // Aquí capturas cualquiera de las excepciones porque todas heredan de ValidationException
                         System.out.println("Error de validación: " + e.getMessage() + " ❌");
                     } catch (Exception e) {
-                        System.out.println("Error inesperado del sistema. ❌");
+                        System.out.println("Error inesperado del sistema. ❌" + e.getMessage());
                     }
 
                     break;

@@ -1,6 +1,7 @@
 package astrobankapp.persistence.repository;
 
 import astrobankapp.domain.Cliente;
+import astrobankapp.persistence.mapper.ClienteRowMapper;
 import astrobankapp.services.outputport.ClientePersistencePort;
 
 import java.sql.Connection;
@@ -13,10 +14,14 @@ import java.util.List;
 public class ClienteRepositoryAdapterMySql implements ClientePersistencePort {
 
     private final Connection connection;
+    private final ClienteRowMapper rowMapper;
 
-    public ClienteRepositoryAdapterMySql(Connection connection) {
+    public ClienteRepositoryAdapterMySql(Connection connection, ClienteRowMapper rowMapper) {
         this.connection = connection;
+        this.rowMapper = rowMapper;
     }
+
+
 
     @Override
     public Cliente saveCliente(Cliente cliente) {
@@ -31,7 +36,9 @@ public class ClienteRepositoryAdapterMySql implements ClientePersistencePort {
                 cliente.setId(keys.getInt(1));
             }
         }catch (SQLException e){
+            System.out.println(e.getMessage());
             throw new RuntimeException("Error al guardar cliente", e);
+
         }
         return cliente;
     }
@@ -66,6 +73,17 @@ public class ClienteRepositoryAdapterMySql implements ClientePersistencePort {
 
     @Override
     public Cliente findClienteById(int id) {
+        String sql = "SELECT * FROM cliente WHERE id = ? ";
+        try (PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.setInt(1, id );
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Cliente cliente = rowMapper.mapRow(rs);
+                return cliente;
+            }
+        }catch (SQLException e ){
+            throw new RuntimeException("Cliente con id " + id + " no existe");
+        }
         return null;
     }
 

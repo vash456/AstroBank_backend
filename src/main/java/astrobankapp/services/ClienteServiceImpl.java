@@ -5,6 +5,7 @@ import astrobankapp.exception.AuthenticationException;
 import astrobankapp.exception.UserAlreadyExistsException;
 import astrobankapp.exception.UserNotFoundException;
 import astrobankapp.persistence.repository.ClienteRepository;
+import astrobankapp.services.outputport.ClientePersistencePort;
 import astrobankapp.utils.FormularioValidacion;
 
 import java.time.Instant;
@@ -12,9 +13,10 @@ import java.util.Optional;
 
 public class ClienteServiceImpl implements ClienteService{
 
-    private final ClienteRepository clienteRepository;
+    private final ClientePersistencePort clienteRepository;
 
-    public ClienteServiceImpl(ClienteRepository clienteRepository){
+
+    public ClienteServiceImpl(ClientePersistencePort clienteRepository){
         this.clienteRepository = clienteRepository;
     }
 
@@ -38,11 +40,13 @@ public class ClienteServiceImpl implements ClienteService{
 
     @Override
     public Cliente autenticar(){
-        String usuario = FormularioValidacion.validateString("Ingrese el usuario:");
+        //String usuario = FormularioValidacion.validateString("Ingrese el usuario:");
+        int id = FormularioValidacion.validateInt("Por favor ingrese el id: ");
         String contrasena = FormularioValidacion.validateString("Ingrese la Contraseña:");
-        FormularioValidacion.validateLoginForm(usuario,contrasena);
-        Cliente cliente = clienteRepository.buscarPorUsuario(usuario);
-        if (!cliente.autenticar(usuario,contrasena))
+        //FormularioValidacion.validateLoginForm(usuario,contrasena);
+        //Cliente cliente = clienteRepository.buscarPorUsuario(usuario);
+        Cliente cliente = clienteRepository.findClienteById(id);
+        if (!cliente.autenticar(cliente.getUsuario(),contrasena))
             throw new AuthenticationException("Usuario o contraseña incorrectos.");
         System.out.println("Login Exitoso ✅");
         return cliente;
@@ -53,7 +57,7 @@ public class ClienteServiceImpl implements ClienteService{
     public Cliente crearCliente() {
 
         Cliente cliente = new Cliente();
-        cliente.setId(clienteRepository.cantidadListaCliente()+1);
+        //cliente.setId(clienteRepository.cantidadListaCliente()+1);
 
         String identificacion = FormularioValidacion.validateString("Ingrese la Identificacion:");
 
@@ -61,13 +65,13 @@ public class ClienteServiceImpl implements ClienteService{
 
         String usuario = FormularioValidacion.validateString("Ingrese el Usuario");
 
-        try {
+        /*try {
             clienteRepository.buscarPorUsuario(usuario);
             throw new UserAlreadyExistsException(usuario);
         }catch (UserNotFoundException e) {
             // si pasa aca, el usuario está disponible.
             System.out.println("El usuario está disponible.");
-        }
+        } */
 
         String celular = FormularioValidacion.validateString("Ingrese su celular:");
 
@@ -98,7 +102,7 @@ public class ClienteServiceImpl implements ClienteService{
         iniciarlizarCliente(cliente);
 
         System.out.println("Usuario registrado exitosamente ✅");
-        return clienteRepository.guardarCliente(cliente);
+        return clienteRepository.saveCliente(cliente);
     }
 
 
