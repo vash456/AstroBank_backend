@@ -26,8 +26,8 @@ public class ClienteRepositoryAdapterMySql implements ClientePersistencePort {
     @Override
     public Cliente saveCliente(Cliente cliente) {
        String sql = "INSERT INTO cliente " +
-               "(id, identificacion, nombre_completo,celular, usuario, contrasena_hash, intentos fallidos, bloqueado)" +
-               "VALUES (?,?,?,?,?,?,?,?)";
+               "(identificacion, nombre_completo,celular, usuario, contrasena_hash, intentos_fallidos, bloqueado)" +
+               "VALUES (?,?,?,?,?,?,?)";
         try(PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)){
             setClienteParams(ps, cliente);
             ps.executeUpdate();
@@ -44,14 +44,14 @@ public class ClienteRepositoryAdapterMySql implements ClientePersistencePort {
     }
 
     private void setClienteParams(PreparedStatement ps, Cliente cliente) throws SQLException{
-        ps.setInt(1, cliente.getId());
-        ps.setString(2, cliente.getIdentificacion());
-        ps.setString(3, cliente.getNombreCompleto());
-        ps.setString(4,cliente.getCelular());
-        ps.setString(5, cliente.getUsuario());
-        ps.setString(6, cliente.getContrasena());
-        ps.setInt(7, cliente.getIntentosFallidos());
-        ps.setBoolean(8, cliente.isBloqueado());
+        ps.setString(1, cliente.getIdentificacion());
+        ps.setString(2, cliente.getNombreCompleto());
+        ps.setString(3,cliente.getCelular());
+        ps.setString(4, cliente.getUsuario());
+        ps.setString(5, cliente.getContrasena());
+        ps.setInt(6, cliente.getIntentosFallidos());
+        int bloqueado = cliente.isBloqueado() ? 1 : 0;
+        ps.setInt(7, bloqueado);
 
     }
 

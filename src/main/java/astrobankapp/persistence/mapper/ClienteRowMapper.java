@@ -19,7 +19,8 @@ public class ClienteRowMapper implements RowMapper<Cliente>{
         cliente.setUsuario(rs.getString ("usuario"));
         cliente.setContrasena(rs.getString ("contrasena_hash"));
         cliente.setIntentosFallidos(rs.getInt ("intentos_fallidos"));
-        cliente.setBloqueado(rs.getBoolean("bloqueado"));
+        boolean bloqueado = rs.getInt("bloqueado") == 1;
+        cliente.setBloqueado(bloqueado);
 
 
         return cliente;
