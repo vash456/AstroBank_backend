@@ -1,5 +1,7 @@
 package astrobankapp.domain;
 
+import astrobankapp.domain.enums.EstadoCuenta;
+
 import java.util.ArrayList;
 
 public class TarjetaCredito extends Cuenta{
