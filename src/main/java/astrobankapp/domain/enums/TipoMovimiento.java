@@ -1,4 +1,4 @@
-package astrobankapp.domain;
+package astrobankapp.domain.enums;
 
 public enum TipoMovimiento {
     CONSIGNACION,

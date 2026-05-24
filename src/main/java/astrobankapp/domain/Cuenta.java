@@ -1,14 +1,13 @@
 package astrobankapp.domain;
 
+import astrobankapp.domain.enums.EstadoCuenta;
+import astrobankapp.domain.enums.TipoMovimiento;
 import astrobankapp.exception.AccountMismatchException;
 import astrobankapp.utils.FormularioValidacion;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
 
 public abstract class Cuenta implements Transferible, Transaccion {
     protected String numeroCuenta;

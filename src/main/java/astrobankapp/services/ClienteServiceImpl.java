@@ -1,6 +1,7 @@
 package astrobankapp.services;
 
 import astrobankapp.domain.*;
+import astrobankapp.domain.enums.EstadoCuenta;
 import astrobankapp.exception.AuthenticationException;
 import astrobankapp.exception.UserAlreadyExistsException;
 import astrobankapp.exception.UserNotFoundException;

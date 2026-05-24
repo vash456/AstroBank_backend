@@ -1,5 +1,7 @@
 package astrobankapp.domain;
 
+import astrobankapp.domain.enums.TipoMovimiento;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 

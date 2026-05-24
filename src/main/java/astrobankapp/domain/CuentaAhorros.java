@@ -1,5 +1,7 @@
 package astrobankapp.domain;
 
+import astrobankapp.domain.enums.EstadoCuenta;
+import astrobankapp.domain.enums.TipoMovimiento;
 import astrobankapp.exception.InvalidAmountException;
 import astrobankapp.utils.FormularioValidacion;
 
