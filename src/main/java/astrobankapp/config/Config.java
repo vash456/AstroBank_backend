@@ -34,7 +34,7 @@ public class Config {
         1, "123456", "1234567890", "c@c.c", "dar", "Darlin Estrada", "10404040"
         );
         clienteRepository.guardarCliente(cliente);
-        clienteService.iniciarlizarCliente(cliente);
+        clienteService.initializeCliente(cliente);
 
         return new MenuApp(clienteView,cuentaView);
     }

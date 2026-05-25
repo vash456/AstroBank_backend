@@ -12,7 +12,7 @@ public class ClienteView {
     }
 
     public void crearCliente(){
-        clienteService.crearCliente();
+        clienteService.createCliente();
     }
 
     public void getClienteById(int id){
@@ -20,15 +20,19 @@ public class ClienteView {
     }
 
     public void actualizarCliente(){
-        clienteService.actualizarCliente(FormularioValidacion.validateInt("Ingrese el ID"));
+        clienteService.updateCliente(FormularioValidacion.validateInt("Ingrese el ID"));
     }
 
     public void borrarCliente(){
-        clienteService.borrarCliente(FormularioValidacion.validateInt("Ingrese el ID del cliente a eliminar"));
+        clienteService.deleteCliente(FormularioValidacion.validateInt("Ingrese el ID del cliente a eliminar"));
     }
 
     public Cliente autenticar(){
-        return clienteService.autenticar();
+        String usuario = FormularioValidacion.validateString("Ingrese el usuario:");
+        String contrasena = FormularioValidacion.validateString("Ingrese la Contraseña:");
+        Cliente cliente = clienteService.authenticate(usuario,contrasena);
+        System.out.println("Login Exitoso ✅");
+        return cliente;
     }
 
 }

@@ -42,10 +42,10 @@ public class Cliente implements Autenticable{
     @Override
     public boolean autenticar(String usuario, String contrasena){
         if (!usuario.equals(this.usuario) || !contrasena.equals(this.contrasena)) {
-            intentosFallidos++;
+            this.incrementarIntentos();
             return false;
         }
-        intentosFallidos = 0;
+        this.resetearIntentos();
         return true;
     }
 
@@ -55,11 +55,11 @@ public class Cliente implements Autenticable{
     }
 
     public void incrementarIntentos(){
-
+        this.intentosFallidos++;
     }
 
     public void resetearIntentos(){
-
+        this.intentosFallidos = 0;
     }
 
     public void editarPerfil(){

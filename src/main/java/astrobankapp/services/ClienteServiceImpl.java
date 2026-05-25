@@ -3,9 +3,6 @@ package astrobankapp.services;
 import astrobankapp.domain.*;
 import astrobankapp.domain.enums.EstadoCuenta;
 import astrobankapp.exception.AuthenticationException;
-import astrobankapp.exception.UserAlreadyExistsException;
-import astrobankapp.exception.UserNotFoundException;
-import astrobankapp.persistence.repository.ClienteRepository;
 import astrobankapp.services.outputport.ClientePersistencePort;
 import astrobankapp.utils.FormularioValidacion;
 
@@ -27,7 +24,7 @@ public class ClienteServiceImpl implements ClienteService{
     }
 
     @Override
-    public void iniciarlizarCliente(Cliente cliente){
+    public void initializeCliente(Cliente cliente){
         String numeroCuentaAhorros = "CA-" + obtenerNumeroUnico();
         CuentaAhorros cuentaAhorros = new CuentaAhorros(numeroCuentaAhorros, cliente, EstadoCuenta.ACTIVA, 0, 1.5);
         String numeroCuentaCorriente = "CC-" + obtenerNumeroUnico();
@@ -40,22 +37,39 @@ public class ClienteServiceImpl implements ClienteService{
     }
 
     @Override
-    public Cliente autenticar(){
-        //String usuario = FormularioValidacion.validateString("Ingrese el usuario:");
-        int id = FormularioValidacion.validateInt("Por favor ingrese el id: ");
-        String contrasena = FormularioValidacion.validateString("Ingrese la Contraseña:");
-        //FormularioValidacion.validateLoginForm(usuario,contrasena);
-        //Cliente cliente = clienteRepository.buscarPorUsuario(usuario);
-        Cliente cliente = clienteRepository.findClienteById(id);
-        if (!cliente.autenticar(cliente.getUsuario(),contrasena))
-            throw new AuthenticationException("Usuario o contraseña incorrectos.");
-        System.out.println("Login Exitoso ✅");
+    public Cliente authenticate(String username, String password){
+        FormularioValidacion.validateLoginForm(username, password);
+        Cliente cliente = clienteRepository.findClienteByUsername(username)
+                .orElseThrow(() -> new AuthenticationException("Usuario o contraseña incorrectos."));
+
+        if (cliente.isBloqueado()) {
+            throw new AuthenticationException("Usuario bloqueado. Contacte al administrador.");
+        }
+
+        boolean autenticado = cliente.autenticar(cliente.getUsuario(), password);
+        if (!autenticado) {
+            int intentos = cliente.getIntentosFallidos();
+            if (intentos >= 3) {
+                cliente.setBloqueado(true);
+            }
+            clienteRepository.updateCliente(cliente);
+            if (cliente.isBloqueado()) {
+                throw new AuthenticationException("Usuario bloqueado tras 3 intentos fallidos.");
+            }
+            throw new AuthenticationException("Usuario o contraseña incorrectos. Intentos fallidos: " + intentos + "/3.");
+        }
+
+        if (cliente.getIntentosFallidos() > 0) {
+            cliente.setIntentosFallidos(0);
+            clienteRepository.updateCliente(cliente);
+        }
+
         return cliente;
     }
 
 
     @Override
-    public Cliente crearCliente() {
+    public Cliente createCliente() {
 
         Cliente cliente = new Cliente();
         //cliente.setId(clienteRepository.cantidadListaCliente()+1);
@@ -100,7 +114,7 @@ public class ClienteServiceImpl implements ClienteService{
         cliente.setIntentosFallidos(0);
         cliente.setBloqueado(false);
 
-        iniciarlizarCliente(cliente);
+        initializeCliente(cliente);
 
         System.out.println("Usuario registrado exitosamente ✅");
         return clienteRepository.saveCliente(cliente);
@@ -119,12 +133,17 @@ public class ClienteServiceImpl implements ClienteService{
     }
 
     @Override
-    public Cliente actualizarCliente(int id) {
+    public Cliente updateCliente(int id) {
         return null;
     }
 
     @Override
-    public void borrarCliente(int id) {
+    public void deleteCliente(int id) {
 
+    }
+
+    @Override
+    public Optional<Cliente> findClienteByUsername(String username) {
+        return clienteRepository.findClienteByUsername(username);
     }
 }

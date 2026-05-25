@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ClienteRepositoryAdapterMySql implements ClientePersistencePort {
 
@@ -72,30 +73,57 @@ public class ClienteRepositoryAdapterMySql implements ClientePersistencePort {
     }
 
     @Override
-    public Cliente findClienteById(int id) {
+    public Optional<Cliente> findClienteById(int id) {
         String sql = "SELECT * FROM cliente WHERE id = ? ";
         try (PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setInt(1, id );
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Cliente cliente = rowMapper.mapRow(rs);
-                return cliente;
+                return Optional.of(rowMapper.mapRow(rs));
             }
         }catch (SQLException e ){
             throw new RuntimeException("Cliente con id " + id + " no existe");
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
     public Cliente updateCliente(Cliente cliente) {
-        return null;
+        String sql = "UPDATE cliente SET identificacion = ?, nombre_completo = ?, celular = ?, usuario = ?, contrasena_hash = ?, intentos_fallidos = ?, bloqueado = ? WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            setClienteParams(ps, cliente);
+            ps.setInt(8, cliente.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al actualizar cliente", e);
+        }
+        return cliente;
     }
 
     @Override
     public void deleteCliente(int id) {
-
+        String sql = "DELETE FROM cliente WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar cliente", e);
+        }
     }
 
 
+    @Override
+    public Optional<Cliente> findClienteByUsername(String username) {
+        String sql = "SELECT * FROM cliente WHERE usuario = ? ";
+        try (PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.setString(1, username );
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return Optional.of(rowMapper.mapRow(rs));
+            }
+        }catch (SQLException e ){
+            throw new RuntimeException("Cliente con usuario " + username + " no existe");
+        }
+        return Optional.empty();
+    }
 }
