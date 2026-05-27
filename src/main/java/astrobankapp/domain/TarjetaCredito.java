@@ -72,4 +72,28 @@ public class TarjetaCredito extends Cuenta{
                 "\n\testadoCuenta = " + estadoCuenta +
                 "\n\tfechaApertura = '" + fechaApertura + '\'';
     }
+
+    public double getCupo() {
+        return cupo;
+    }
+
+    public void setCupo(double cupo) {
+        this.cupo = cupo;
+    }
+
+    public double getDeuda() {
+        return deuda;
+    }
+
+    public void setDeuda(double deuda) {
+        this.deuda = deuda;
+    }
+
+    public int getNumeroCuotas() {
+        return numeroCuotas;
+    }
+
+    public void setNumeroCuotas(int numeroCuotas) {
+        this.numeroCuotas = numeroCuotas;
+    }
 }

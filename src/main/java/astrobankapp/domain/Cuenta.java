@@ -90,4 +90,44 @@ public abstract class Cuenta implements Transferible, Transaccion {
     public EstadoCuenta getEstadoCuenta() {
         return estadoCuenta;
     }
+
+    public Cliente getPropietario() {
+        return propietario;
+    }
+
+    public String getFechaApertura() {
+        return fechaApertura;
+    }
+
+    public void setFechaApertura(String fechaApertura) {
+        this.fechaApertura = fechaApertura;
+    }
+
+    public void setNumeroCuenta(String numeroCuenta) {
+        this.numeroCuenta = numeroCuenta;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public void setEstadoCuenta(EstadoCuenta estadoCuenta) {
+        this.estadoCuenta = estadoCuenta;
+    }
+
+    public void setPropietario(Cliente propietario) {
+        this.propietario = propietario;
+    }
+
+    public ArrayList<Movimiento> getMovimientos() {
+        return movimientos;
+    }
+
+    public void setMovimientos(ArrayList<Movimiento> movimientos) {
+        this.movimientos = movimientos;
+    }
 }

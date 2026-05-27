@@ -1,4 +1,4 @@
-package astrobankapp.services;
+package astrobankapp.services.input;
 
 import astrobankapp.domain.Cliente;
 
@@ -10,7 +10,6 @@ public interface ClienteService {
     public Optional<Cliente> getClienteByEmail(String email);
     public Cliente updateCliente(int id);
     public void deleteCliente(int id);
-    void initializeCliente(Cliente cliente);
     public Cliente authenticate(String username, String password);
     Optional<Cliente> findClienteByUsername(String username);
 

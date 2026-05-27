@@ -1,7 +1,7 @@
 package astrobankapp.view;
 
 import astrobankapp.domain.Cliente;
-import astrobankapp.services.ClienteService;
+import astrobankapp.services.input.ClienteService;
 import astrobankapp.utils.FormularioValidacion;
 
 public class ClienteView {
@@ -11,8 +11,8 @@ public class ClienteView {
         this.clienteService = clienteService;
     }
 
-    public void crearCliente(){
-        clienteService.createCliente();
+    public Cliente crearCliente(){
+        return clienteService.createCliente();
     }
 
     public void getClienteById(int id){

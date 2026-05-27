@@ -3,8 +3,8 @@
 --  Basado en el diagrama de clases UML
 -- ============================================================
 
-CREATE DATABASE IF NOT EXISTS banco_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE banco_db;
+CREATE DATABASE IF NOT EXISTS astro_bank CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE astro_bank;
 
 -- ============================================================
 -- ENUMERACIONES como tablas de catálogo

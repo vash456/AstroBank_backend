@@ -1,9 +1,10 @@
-package astrobankapp.services;
+package astrobankapp.services.input;
 
+import astrobankapp.domain.Cliente;
 import astrobankapp.domain.Cuenta;
-
-import java.util.ArrayList;
 
 public interface CuentaService {
     public Cuenta buscarPorNumeroCuenta(String numeroCuenta);
+
+    void initializeCliente(Cliente cliente);
 }

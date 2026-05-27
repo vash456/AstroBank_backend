@@ -41,7 +41,8 @@ public class MenuApp {
                 case 1:
                     System.out.println("\nRegistro:");
                     try {
-                        clienteView.crearCliente();
+                        Cliente cliente = clienteView.crearCliente();
+                        cuentaView.initializeCliente(cliente);
                     }catch (ValidationException e) {
                         // Aquí capturas cualquiera de las excepciones porque todas heredan de ValidationException
                         System.out.println("Error de validación: " + e.getMessage() + " ❌");

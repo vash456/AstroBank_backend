@@ -3,13 +3,16 @@ package astrobankapp.config;
 import astrobankapp.domain.Cliente;
 import astrobankapp.persistence.database.DataBaseConnectionMySql;
 import astrobankapp.persistence.mapper.ClienteRowMapper;
+import astrobankapp.persistence.mapper.CuentaRowMapper;
 import astrobankapp.persistence.repository.ClienteRepository;
 import astrobankapp.persistence.repository.ClienteRepositoryAdapterMySql;
-import astrobankapp.services.ClienteService;
+import astrobankapp.persistence.repository.CuentaRepositoryAdapterMySql;
+import astrobankapp.services.input.ClienteService;
 import astrobankapp.services.ClienteServiceImpl;
-import astrobankapp.services.CuentaService;
+import astrobankapp.services.input.CuentaService;
 import astrobankapp.services.CuentaServiceImpl;
 import astrobankapp.services.outputport.ClientePersistencePort;
+import astrobankapp.services.outputport.CuentaPersistensePort;
 import astrobankapp.userinterface.MenuApp;
 import astrobankapp.view.ClienteView;
 import astrobankapp.view.CuentaView;
@@ -26,15 +29,20 @@ public class Config {
         ClienteService clienteService = new ClienteServiceImpl(clienteRepositoryDb);
         ClienteView clienteView = new ClienteView(clienteService);
 
-        CuentaService cuentaService = new CuentaServiceImpl(clienteRepository);
+        CuentaRowMapper cuentaRowMapper = new CuentaRowMapper(connection, clienteRepositoryDb);
+        CuentaPersistensePort cuentaRepositoryDb = new CuentaRepositoryAdapterMySql(connection,cuentaRowMapper);
+
+        CuentaService cuentaService = new CuentaServiceImpl(cuentaRepositoryDb);
         CuentaView cuentaView = new CuentaView(cuentaService);
 
+
+
         //datos de prueba iniciales
-        Cliente cliente = new Cliente(
+        /*Cliente cliente = new Cliente(
         1, "123456", "1234567890", "c@c.c", "dar", "Darlin Estrada", "10404040"
         );
         clienteRepository.guardarCliente(cliente);
-        clienteService.initializeCliente(cliente);
+        clienteService.initializeCliente(cliente);*/
 
         return new MenuApp(clienteView,cuentaView);
     }

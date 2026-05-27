@@ -83,4 +83,12 @@ public class CuentaCorriente extends Cuenta{
     public double getLimiteSobregiro() {
         return limiteSobregiro;
     }
+
+    public void setPorcentajeSobregiro(double porcentajeSobregiro) {
+        this.porcentajeSobregiro = porcentajeSobregiro;
+    }
+
+    public void setLimiteSobregiro(double limiteSobregiro) {
+        this.limiteSobregiro = limiteSobregiro;
+    }
 }

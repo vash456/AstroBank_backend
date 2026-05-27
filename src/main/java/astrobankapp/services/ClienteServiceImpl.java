@@ -3,37 +3,20 @@ package astrobankapp.services;
 import astrobankapp.domain.*;
 import astrobankapp.domain.enums.EstadoCuenta;
 import astrobankapp.exception.AuthenticationException;
+import astrobankapp.services.input.ClienteService;
 import astrobankapp.services.outputport.ClientePersistencePort;
 import astrobankapp.utils.FormularioValidacion;
 
 import java.time.Instant;
 import java.util.Optional;
 
-public class ClienteServiceImpl implements ClienteService{
+public class ClienteServiceImpl implements ClienteService {
 
     private final ClientePersistencePort clienteRepository;
 
 
     public ClienteServiceImpl(ClientePersistencePort clienteRepository){
         this.clienteRepository = clienteRepository;
-    }
-
-    public String obtenerNumeroUnico(){
-        long segundosUnicos = Instant.now().getEpochSecond();
-        return String.valueOf(segundosUnicos);
-    }
-
-    @Override
-    public void initializeCliente(Cliente cliente){
-        String numeroCuentaAhorros = "CA-" + obtenerNumeroUnico();
-        CuentaAhorros cuentaAhorros = new CuentaAhorros(numeroCuentaAhorros, cliente, EstadoCuenta.ACTIVA, 0, 1.5);
-        String numeroCuentaCorriente = "CC-" + obtenerNumeroUnico();
-        CuentaCorriente cuentaCorriente = new CuentaCorriente(numeroCuentaCorriente, cliente, EstadoCuenta.ACTIVA,0, 20, 500000);
-        String numeroTarjetaCredito = "TC-" + obtenerNumeroUnico();
-        TarjetaCredito tarjetaCredito = new TarjetaCredito(numeroTarjetaCredito, cliente, EstadoCuenta.ACTIVA, 0, 3000000, 0, 12);
-        cliente.agregarCuenta(cuentaAhorros);
-        cliente.agregarCuenta(cuentaCorriente);
-        cliente.agregarCuenta(tarjetaCredito);
     }
 
     @Override
@@ -113,8 +96,6 @@ public class ClienteServiceImpl implements ClienteService{
         cliente.setContrasena(contrasena);
         cliente.setIntentosFallidos(0);
         cliente.setBloqueado(false);
-
-        initializeCliente(cliente);
 
         System.out.println("Usuario registrado exitosamente ✅");
         return clienteRepository.saveCliente(cliente);

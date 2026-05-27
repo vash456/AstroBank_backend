@@ -39,7 +39,6 @@ public class ClienteRepositoryAdapterMySql implements ClientePersistencePort {
         }catch (SQLException e){
             System.out.println(e.getMessage());
             throw new RuntimeException("Error al guardar cliente", e);
-
         }
         return cliente;
     }
