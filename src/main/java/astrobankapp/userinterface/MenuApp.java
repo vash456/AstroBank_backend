@@ -123,13 +123,17 @@ public class MenuApp {
                 case 2:
                     try {
                         System.out.println("Consignar:");
-                        Cuenta cuentaSeleccionadaAux = seleccionarCuenta((ArrayList<Cuenta>) cliente.getCuentas(),true);
+                        Cuenta cuentaSeleccionada = seleccionarCuenta((ArrayList<Cuenta>) cliente.getCuentas(), true);
+                        if (cuentaSeleccionada == null) {
+                            break;
+                        }
                         double monto = FormularioValidacion.validateDouble("Ingrese el monto: ");
-                        cuentaSeleccionadaAux.consignar(monto);
+                        Cuenta cuentaActualizada = cuentaView.consignarDinero(cuentaSeleccionada, monto);
+                        System.out.printf("Consignación exitosa. Nuevo saldo: %.2f%n", cuentaActualizada.consultarSaldo());
                     }catch (ValidationException e) {
                         System.out.println("Error de validación: " + e.getMessage() + " ❌");
                     } catch (Exception e) {
-                        System.out.println("Error inesperado del sistema. ❌");
+                        System.out.println("Error inesperado del sistema. ❌" + e.getMessage());
                     }
                     break;
                 case 3:

@@ -30,4 +30,8 @@ public class CuentaView {
     public void initializeCuentasCliente(Cliente cliente){
         this.cuentaService.initializeCuentasCliente(cliente);
     }
+
+    public Cuenta consignarDinero(Cuenta cuenta, double monto) {
+        return this.cuentaService.consignarConPersistencia(cuenta, monto);
+    }
 }

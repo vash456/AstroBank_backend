@@ -9,4 +9,5 @@ public interface CuentaService {
     public Cuenta buscarPorNumeroCuenta(String numeroCuenta);
     List<Cuenta> findCuentasByClienteId(int clienteId);
     void initializeCuentasCliente(Cliente cliente);
+    Cuenta consignarConPersistencia(Cuenta cuenta, double monto);
 }

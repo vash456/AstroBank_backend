@@ -53,4 +53,10 @@ public class CuentaServiceImpl implements CuentaService {
         cuentaRepository.saveCuenta(tarjetaCredito);
     }
 
+    @Override
+    public Cuenta consignarConPersistencia(Cuenta cuenta, double monto) {
+        cuenta.consignar(monto);
+        return cuentaRepository.updateCuenta(cuenta);
+    }
+
 }
