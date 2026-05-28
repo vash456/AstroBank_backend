@@ -10,4 +10,5 @@ public interface CuentaService {
     List<Cuenta> findCuentasByClienteId(int clienteId);
     void initializeCuentasCliente(Cliente cliente);
     Cuenta consignarConPersistencia(Cuenta cuenta, double monto);
+    Cuenta retirarConPersistencia(Cuenta cuenta, double monto);
 }

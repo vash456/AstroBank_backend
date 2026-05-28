@@ -59,4 +59,10 @@ public class CuentaServiceImpl implements CuentaService {
         return cuentaRepository.updateCuenta(cuenta);
     }
 
+    @Override
+    public Cuenta retirarConPersistencia(Cuenta cuenta, double monto) {
+        cuenta.retirar(monto);
+        return cuentaRepository.updateCuenta(cuenta);
+    }
+
 }

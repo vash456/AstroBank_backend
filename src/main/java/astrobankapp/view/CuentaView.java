@@ -34,4 +34,8 @@ public class CuentaView {
     public Cuenta consignarDinero(Cuenta cuenta, double monto) {
         return this.cuentaService.consignarConPersistencia(cuenta, monto);
     }
+
+    public Cuenta retirarDinero(Cuenta cuenta, double monto) {
+        return this.cuentaService.retirarConPersistencia(cuenta, monto);
+    }
 }

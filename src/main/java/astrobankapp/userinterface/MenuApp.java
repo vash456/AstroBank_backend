@@ -140,12 +140,16 @@ public class MenuApp {
                     try {
                         System.out.println("Retirar:");
                         Cuenta cuentaSeleccionada = seleccionarCuenta((ArrayList<Cuenta>) cliente.getCuentas(),true);
+                        if (cuentaSeleccionada == null) {
+                            break;
+                        }
                         double monto = FormularioValidacion.validateDouble("Ingrese el monto: ");
-                        cuentaSeleccionada.retirar(monto);
+                        Cuenta cuentaActualizada = cuentaView.retirarDinero(cuentaSeleccionada, monto);
+                        System.out.printf("Retiro exitoso. Nuevo saldo: %.2f%n", cuentaActualizada.consultarSaldo());
                     }catch (ValidationException e) {
                         System.out.println("Error de validación: " + e.getMessage() + " ❌");
                     } catch (Exception e) {
-                        System.out.println("Error inesperado del sistema. ❌");
+                        System.out.println("Error inesperado del sistema. ❌" + e.getMessage());
                     }
                     break;
 
