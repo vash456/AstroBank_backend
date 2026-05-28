@@ -13,6 +13,9 @@ import astrobankapp.services.input.CuentaService;
 import astrobankapp.services.CuentaServiceImpl;
 import astrobankapp.services.outputport.ClientePersistencePort;
 import astrobankapp.services.outputport.CuentaPersistensePort;
+import astrobankapp.session.Session;
+import astrobankapp.services.outputport.SessionPersistencePort;
+import astrobankapp.persistence.repository.SessionRepositoryAdapterMySql;
 import astrobankapp.userinterface.MenuApp;
 import astrobankapp.view.ClienteView;
 import astrobankapp.view.CuentaView;
@@ -34,7 +37,8 @@ public class Config {
 
         CuentaService cuentaService = new CuentaServiceImpl(cuentaRepositoryDb);
         CuentaView cuentaView = new CuentaView(cuentaService);
-
+        SessionPersistencePort sessionRepo = new SessionRepositoryAdapterMySql(connection);
+        Session session = new Session(sessionRepo);
 
 
         //datos de prueba iniciales
@@ -44,7 +48,7 @@ public class Config {
         clienteRepository.guardarCliente(cliente);
         clienteService.initializeCliente(cliente);*/
 
-        return new MenuApp(clienteView,cuentaView);
+        return new MenuApp(clienteView, cuentaView, session);
     }
 
 

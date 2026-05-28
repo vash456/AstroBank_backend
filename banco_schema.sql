@@ -137,7 +137,7 @@ CREATE TABLE sesion (
     id           INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     cliente_id   INT UNSIGNED NOT NULL,
     token        VARCHAR(255) NOT NULL UNIQUE,
-    ip_address   VARCHAR(45)  NOT NULL,
+    ip_address   VARCHAR(45)  NULL,
     activa       BOOLEAN      NOT NULL DEFAULT TRUE,
     creada_en    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     cerrada_en   DATETIME     NULL,

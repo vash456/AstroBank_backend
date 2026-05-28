@@ -6,6 +6,7 @@ import astrobankapp.domain.Movimiento;
 import astrobankapp.domain.TarjetaCredito;
 import astrobankapp.exception.ValidationException;
 import astrobankapp.persistence.database.DataBaseConnectionMySql;
+import astrobankapp.session.Session;
 import astrobankapp.utils.FormularioValidacion;
 import astrobankapp.view.ClienteView;
 import astrobankapp.view.CuentaView;
@@ -18,10 +19,12 @@ public class MenuApp {
     Scanner sc = new Scanner(System.in);
     private final ClienteView clienteView;
     private final CuentaView cuentaView;
+    private final Session session;
 
-    public MenuApp(ClienteView clienteView, CuentaView cuentaView){
+    public MenuApp(ClienteView clienteView, CuentaView cuentaView, Session session){
         this.clienteView = clienteView;
         this.cuentaView = cuentaView;
+        this.session = session;
     }
 
     public void mostrarMenuPrincipal(){
@@ -42,7 +45,7 @@ public class MenuApp {
                     System.out.println("\nRegistro:");
                     try {
                         Cliente cliente = clienteView.crearCliente();
-                        cuentaView.initializeCliente(cliente);
+                        cuentaView.initializeCuentasCliente(cliente);
                     }catch (ValidationException e) {
                         // Aquí capturas cualquiera de las excepciones porque todas heredan de ValidationException
                         System.out.println("Error de validación: " + e.getMessage() + " ❌");
@@ -55,7 +58,11 @@ public class MenuApp {
                     System.out.println("Inicio sesion");
                     try {
                         Cliente cliente = clienteView.autenticar();
-                        mostrarMenuCliente(cliente);
+                        cliente.setCuentas(cuentaView.buscarCuentasPorCliente(cliente.getId()));
+                        System.out.println("funciona");
+                        session.start(cliente);
+                        System.out.println("funciona 2");
+                        mostrarMenuCliente();
                     }catch (ValidationException e) {
                         // Aquí capturas cualquiera de las excepciones porque todas heredan de ValidationException
                         System.out.println("Error de validación: " + e.getMessage() + " ❌");
@@ -73,7 +80,12 @@ public class MenuApp {
         }
     }
 
-    public void mostrarMenuCliente(Cliente cliente){
+    public void mostrarMenuCliente(){
+        Cliente cliente = session.getCliente();
+        if (cliente == null) {
+            System.out.println("No hay una sesión activa. Por favor inicie sesión primero.");
+            return;
+        }
         int initCliente = 1;
         while (initCliente != 0){
             System.out.println("""
@@ -93,12 +105,19 @@ public class MenuApp {
                 case 1:
                     System.out.println("Saldos:");
                     try {
-                        Cuenta cuentaSeleccionada = seleccionarCuenta((ArrayList<Cuenta>) cliente.getCuentas(),true);
-                        System.out.println(cuentaSeleccionada);
+                        Cuenta cuentaSeleccionada = seleccionarCuenta((ArrayList<Cuenta>) cliente.getCuentas(), true);
+                        if (cuentaSeleccionada == null) {
+                            break;
+                        }
+                        Cuenta cuentaActualizada = cuentaView.buscarPorNumeroCuenta(cuentaSeleccionada.getNumeroCuenta());
+                        if (cuentaActualizada.getPropietario().getId() != cliente.getId()) {
+                            throw new ValidationException("La cuenta seleccionada no pertenece al cliente autenticado.");
+                        }
+                        System.out.printf("Saldo actual de la cuenta %s: %.2f%n", cuentaActualizada.getNumeroCuenta(), cuentaActualizada.consultarSaldo());
                     }catch (ValidationException e) {
                         System.out.println("Error de validación: " + e.getMessage() + " ❌");
                     } catch (Exception e) {
-                        System.out.println("Error inesperado del sistema. ❌");
+                        System.out.println("Error inesperado del sistema. ❌" + e.getMessage());
                     }
                     break;
                 case 2:
@@ -160,6 +179,8 @@ public class MenuApp {
                     break;
 
                 case 9:
+                    System.out.println("Cerrando sesión...");
+                    session.end();
                     initCliente = 0;
                     break;
                 default:

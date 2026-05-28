@@ -92,6 +92,37 @@ public class CuentaRepositoryAdapterMySql implements CuentaPersistensePort {
     }
 
     @Override
+    public Optional<Cuenta> findCuentaByNumeroCuenta(String numeroCuenta) {
+        String sql = "SELECT c.id, c.numero_cuenta, c.saldo, c.fecha_apertura, e.nombre AS estado_nombre, c.tipo_cuenta, c.cliente_id FROM cuenta c INNER JOIN estado_cuenta e ON c.estado_cuenta_id = e.id WHERE c.numero_cuenta = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, numeroCuenta.trim());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return Optional.of(cuentaRowMapper.mapRow(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar la cuenta por numero de cuenta", e);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public List<Cuenta> findCuentasByClienteId(int clienteId) {
+        List<Cuenta> cuentas = new ArrayList<>();
+        String sql = "SELECT c.id, c.numero_cuenta, c.saldo, c.fecha_apertura, e.nombre AS estado_nombre, c.tipo_cuenta, c.cliente_id FROM cuenta c INNER JOIN estado_cuenta e ON c.estado_cuenta_id = e.id WHERE c.cliente_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, clienteId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                cuentas.add(cuentaRowMapper.mapRow(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar las cuentas del cliente", e);
+        }
+        return cuentas;
+    }
+
+    @Override
     public Cuenta updateCuenta(Cuenta cuenta) {
         String sql = "UPDATE cuenta SET saldo = ?, estado_cuenta_id = ? WHERE numero_cuenta = ?";
         boolean originalAutoCommit;

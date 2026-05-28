@@ -9,6 +9,7 @@ import astrobankapp.services.outputport.CuentaPersistensePort;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CuentaServiceImpl implements CuentaService {
 
@@ -21,16 +22,13 @@ public class CuentaServiceImpl implements CuentaService {
 
     @Override
     public Cuenta buscarPorNumeroCuenta(String numeroCuenta) {
-        /*ArrayList<Cliente> clientes = (ArrayList<Cliente>) cuentaRepository.getClientes();
-        for (Cliente cliente: clientes){
-            for (Cuenta c : cliente.getCuentas()) {
-                if (c.getNumeroCuenta().equalsIgnoreCase(numeroCuenta.trim())) {
-                    return c;
-                }
-            }
-        }
-        throw new AccountMismatchException("⚠ No se encontró ninguna cuenta con el número: " + numeroCuenta);*/
-        return null;
+        return cuentaRepository.findCuentaByNumeroCuenta(numeroCuenta)
+                .orElseThrow(() -> new AccountMismatchException("⚠ No se encontró ninguna cuenta con el número: " + numeroCuenta));
+    }
+
+    @Override
+    public List<Cuenta> findCuentasByClienteId(int clienteId) {
+        return cuentaRepository.findCuentasByClienteId(clienteId);
     }
 
     public String obtenerNumeroUnico(){
@@ -39,7 +37,7 @@ public class CuentaServiceImpl implements CuentaService {
     }
 
     @Override
-    public void initializeCliente(Cliente cliente){
+    public void initializeCuentasCliente(Cliente cliente){
         String numeroCuentaAhorros = "CA-" + obtenerNumeroUnico();
         CuentaAhorros cuentaAhorros = new CuentaAhorros(numeroCuentaAhorros, cliente, EstadoCuenta.ACTIVA, 0, 1.5);
         String numeroCuentaCorriente = "CC-" + obtenerNumeroUnico();
