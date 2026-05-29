@@ -174,6 +174,77 @@ public class MenuApp {
                     }
                     break;
 
+                case 5:
+                    try {
+                        System.out.println("Comprar con tarjeta:");
+                        // Seleccionar tarjeta de crédito
+                        ArrayList<Cuenta> soloTarjetas = new ArrayList<>();
+                        for (Cuenta c : cliente.getCuentas()) {
+                            if (c instanceof TarjetaCredito) {
+                                soloTarjetas.add(c);
+                            }
+                        }
+                        
+                        if (soloTarjetas.isEmpty()) {
+                            System.out.println("⚠ No tienes tarjetas de crédito disponibles.");
+                            break;
+                        }
+                        
+                        System.out.println("\nSelecciona tu tarjeta de crédito:");
+                        System.out.printf("%-10s %-15s %-12s %-12s%n", "#", "Número", "Cupo", "Deuda");
+                        for (int i = 0; i < soloTarjetas.size(); i++) {
+                            TarjetaCredito tc = (TarjetaCredito) soloTarjetas.get(i);
+                            System.out.printf("%-10d %-15s $%-11.2f $%-11.2f%n", 
+                                    i + 1, tc.getNumeroCuenta(), tc.getCupo(), tc.getDeuda());
+                        }
+                        int opcionTarjeta = FormularioValidacion.validateInt("> ");
+                        if (opcionTarjeta < 1 || opcionTarjeta > soloTarjetas.size()) {
+                            System.out.println("Opción inválida.");
+                            break;
+                        }
+                        TarjetaCredito tarjetaSeleccionada = (TarjetaCredito) soloTarjetas.get(opcionTarjeta - 1);
+                        
+                        // Solicitar monto y cuotas
+                        double montoCom = FormularioValidacion.validateDouble("Ingrese el monto de la compra: ");
+                        
+                        System.out.println("\nSelecciona el número de cuotas:");
+                        System.out.println("1. 2 cuotas (0% interés)");
+                        System.out.println("2. 3 cuotas (1.9% interés mensual)");
+                        System.out.println("3. 4 cuotas (1.9% interés mensual)");
+                        System.out.println("4. 5 cuotas (1.9% interés mensual)");
+                        System.out.println("5. 6 cuotas (1.9% interés mensual)");
+                        System.out.println("6. 7 cuotas (2.3% interés mensual)");
+                        System.out.println("7. 8 cuotas (2.3% interés mensual)");
+                        System.out.println("8. 12 cuotas (2.3% interés mensual)");
+                        int opcionCuotas = FormularioValidacion.validateInt("> ");
+                        
+                        int cuotasSeleccionadas = 0;
+                        switch (opcionCuotas) {
+                            case 1 -> cuotasSeleccionadas = 2;
+                            case 2 -> cuotasSeleccionadas = 3;
+                            case 3 -> cuotasSeleccionadas = 4;
+                            case 4 -> cuotasSeleccionadas = 5;
+                            case 5 -> cuotasSeleccionadas = 6;
+                            case 6 -> cuotasSeleccionadas = 7;
+                            case 7 -> cuotasSeleccionadas = 8;
+                            case 8 -> cuotasSeleccionadas = 12;
+                            default -> {
+                                System.out.println("Opción inválida.");
+                                break;
+                            }
+                        }
+                        
+                        if (cuotasSeleccionadas > 0) {
+                            TarjetaCredito tarjetaActualizada = cuentaView.comprarConTarjeta(tarjetaSeleccionada, montoCom, cuotasSeleccionadas);
+                            System.out.printf("Cupo disponible: $%.2f%nDeuda total: $%.2f%n",
+                                    tarjetaActualizada.getCupo() - tarjetaActualizada.getDeuda(), tarjetaActualizada.getDeuda());
+                        }
+                    }catch (ValidationException e) {
+                        System.out.println("Error de validación: " + e.getMessage() + " ❌");
+                    } catch (Exception e) {
+                        System.out.println("Error inesperado del sistema. ❌" + e.getMessage());
+                    }
+                    break;
                 case 7:
                     try {
                         System.out.println("Consultar Movimientos:");

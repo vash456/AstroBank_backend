@@ -71,4 +71,10 @@ public class CuentaServiceImpl implements CuentaService {
         cuentaRepository.actualizarCuentas(cuentaOrigen, cuentaDestino);
     }
 
+    @Override
+    public TarjetaCredito comprarConTarjetaConPersistencia(TarjetaCredito tarjeta, double monto, int cuotas) {
+        tarjeta.comprar(monto, cuotas);
+        return (TarjetaCredito) cuentaRepository.updateCuenta(tarjeta);
+    }
+
 }

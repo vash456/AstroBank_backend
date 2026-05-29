@@ -2,6 +2,7 @@ package astrobankapp.view;
 
 import astrobankapp.domain.Cliente;
 import astrobankapp.domain.Cuenta;
+import astrobankapp.domain.TarjetaCredito;
 import astrobankapp.services.input.CuentaService;
 import astrobankapp.utils.FormularioValidacion;
 
@@ -40,4 +41,9 @@ public class CuentaView {
     }
     public void transferirDinero(Cuenta cuentaOrigen, Cuenta cuentaDestino, double monto) {
         this.cuentaService.transferirConPersistencia(cuentaOrigen, cuentaDestino, monto);
-    }}
+    }
+
+    public TarjetaCredito comprarConTarjeta(TarjetaCredito tarjeta, double monto, int cuotas) {
+        return this.cuentaService.comprarConTarjetaConPersistencia(tarjeta, monto, cuotas);
+    }
+}
