@@ -50,6 +50,7 @@ CREATE TABLE cliente (
     nombre_completo     VARCHAR(120)     NOT NULL,
     celular             VARCHAR(20)      NOT NULL,
     usuario             VARCHAR(50)      NOT NULL UNIQUE,
+    correo              VARCHAR(255)     NOT NULL,
     contrasena_hash     VARCHAR(255)     NOT NULL,          -- almacenar hash, NUNCA texto plano
     intentos_fallidos   TINYINT UNSIGNED NOT NULL DEFAULT 0,
     bloqueado           BOOLEAN          NOT NULL DEFAULT FALSE,

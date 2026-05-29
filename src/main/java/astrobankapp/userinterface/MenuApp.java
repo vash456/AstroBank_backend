@@ -313,7 +313,7 @@ public class MenuApp {
                     break;
 
                 case 8:
-                    System.out.println(cliente.toString());
+                    mostrarPerfilCliente(cliente);
                     break;
 
                 case 9:
@@ -398,6 +398,24 @@ public class MenuApp {
 
     private String obtenerTipo(Cuenta c) {
         return c.getClass().getSimpleName();
+    }
+
+    private void mostrarPerfilCliente(Cliente cliente) {
+        System.out.println("\n=== Perfil del Cliente ===");
+        System.out.printf("Nombre completo: %s%n", cliente.getNombreCompleto());
+        System.out.printf("Usuario:         %s%n", cliente.getUsuario());
+        System.out.printf("Correo:          %s%n", cliente.getCorreo());
+        System.out.printf("Celular:         %s%n", cliente.getCelular());
+        System.out.printf("Identificación:  %s%n", cliente.getIdentificacion());
+        System.out.printf("Estado:          %s%n", cliente.isBloqueado() ? "BLOQUEADO" : "ACTIVO");
+        System.out.printf("Cuentas totales: %d%n", cliente.getCuentas().size());
+        if (!cliente.getCuentas().isEmpty()) {
+            System.out.println("Cuentas disponibles:");
+            for (Cuenta cuenta : cliente.getCuentas()) {
+                System.out.printf("  - %s (%s)%n", cuenta.getNumeroCuenta(), obtenerTipo(cuenta));
+            }
+        }
+        System.out.println("===========================\n");
     }
 
     public int menuSeleccionCuentas(Cliente cliente){

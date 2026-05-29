@@ -16,6 +16,7 @@ public class ClienteRowMapper implements RowMapper<Cliente>{
         cliente.setIdentificacion(rs.getString( "identificacion"));
         cliente.setNombreCompleto(rs.getString ("nombre_completo"));
         cliente.setCelular(rs.getString ("celular"));
+        cliente.setCorreo(rs.getString("correo"));
         cliente.setUsuario(rs.getString ("usuario"));
         cliente.setContrasena(rs.getString ("contrasena_hash"));
         cliente.setIntentosFallidos(rs.getInt ("intentos_fallidos"));

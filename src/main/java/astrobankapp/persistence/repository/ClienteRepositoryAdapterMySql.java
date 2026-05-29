@@ -27,8 +27,8 @@ public class ClienteRepositoryAdapterMySql implements ClientePersistencePort {
     @Override
     public Cliente saveCliente(Cliente cliente) {
        String sql = "INSERT INTO cliente " +
-               "(identificacion, nombre_completo,celular, usuario, contrasena_hash, intentos_fallidos, bloqueado)" +
-               "VALUES (?,?,?,?,?,?,?)";
+               "(identificacion, nombre_completo, celular, usuario, correo, contrasena_hash, intentos_fallidos, bloqueado)" +
+               "VALUES (?,?,?,?,?,?,?,?)";
         try(PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)){
             setClienteParams(ps, cliente);
             ps.executeUpdate();
@@ -48,11 +48,11 @@ public class ClienteRepositoryAdapterMySql implements ClientePersistencePort {
         ps.setString(2, cliente.getNombreCompleto());
         ps.setString(3,cliente.getCelular());
         ps.setString(4, cliente.getUsuario());
-        ps.setString(5, cliente.getContrasena());
-        ps.setInt(6, cliente.getIntentosFallidos());
+        ps.setString(5, cliente.getCorreo());
+        ps.setString(6, cliente.getContrasena());
+        ps.setInt(7, cliente.getIntentosFallidos());
         int bloqueado = cliente.isBloqueado() ? 1 : 0;
-        ps.setInt(7, bloqueado);
-
+        ps.setInt(8, bloqueado);
     }
 
 
@@ -88,10 +88,10 @@ public class ClienteRepositoryAdapterMySql implements ClientePersistencePort {
 
     @Override
     public Cliente updateCliente(Cliente cliente) {
-        String sql = "UPDATE cliente SET identificacion = ?, nombre_completo = ?, celular = ?, usuario = ?, contrasena_hash = ?, intentos_fallidos = ?, bloqueado = ? WHERE id = ?";
+        String sql = "UPDATE cliente SET identificacion = ?, nombre_completo = ?, celular = ?, usuario = ?, correo = ?, contrasena_hash = ?, intentos_fallidos = ?, bloqueado = ? WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             setClienteParams(ps, cliente);
-            ps.setInt(8, cliente.getId());
+            ps.setInt(9, cliente.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error al actualizar cliente", e);
