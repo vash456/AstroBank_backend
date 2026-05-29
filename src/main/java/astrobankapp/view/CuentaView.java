@@ -4,6 +4,7 @@ import astrobankapp.domain.Cliente;
 import astrobankapp.domain.Cuenta;
 import astrobankapp.domain.TarjetaCredito;
 import astrobankapp.services.input.CuentaService;
+import astrobankapp.domain.Movimiento;
 import astrobankapp.utils.FormularioValidacion;
 
 import java.util.List;
@@ -49,5 +50,9 @@ public class CuentaView {
 
     public TarjetaCredito pagarTarjeta(Cuenta cuentaOrigen, TarjetaCredito tarjeta, double monto) {
         return this.cuentaService.pagarTarjetaConPersistencia(cuentaOrigen, tarjeta, monto);
+    }
+
+    public List<Movimiento> obtenerMovimientosPorNumeroCuenta(String numeroCuenta) {
+        return this.cuentaService.findMovimientosByNumeroCuenta(numeroCuenta);
     }
 }

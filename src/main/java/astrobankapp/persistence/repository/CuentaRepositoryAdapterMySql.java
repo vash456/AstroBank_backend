@@ -203,6 +203,25 @@ public class CuentaRepositoryAdapterMySql implements CuentaPersistensePort {
     }
 
     @Override
+    public List<Movimiento> findMovimientosByNumeroCuenta(String numeroCuenta) {
+        String sql = "SELECT m.id, tm.nombre AS tipo_nombre, m.valor, m.saldo_posterior, m.descripcion, m.fecha_hora " +
+                     "FROM movimiento m INNER JOIN tipo_movimiento tm ON m.tipo_movimiento_id = tm.id " +
+                     "WHERE m.cuenta_id = (SELECT id FROM cuenta WHERE numero_cuenta = ?) ORDER BY m.fecha_hora ASC";
+        List<Movimiento> movimientos = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, numeroCuenta);
+            ResultSet rs = ps.executeQuery();
+            MovimientoRowMapper mapper = new MovimientoRowMapper();
+            while (rs.next()) {
+                movimientos.add(mapper.mapRow(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al cargar movimientos para la cuenta: " + numeroCuenta, e);
+        }
+        return movimientos;
+    }
+
+    @Override
     public void actualizarCuentas(Cuenta cuentaOrigen, Cuenta cuentaDestino) {
         boolean originalAutoCommit;
         try {
@@ -321,7 +340,7 @@ public class CuentaRepositoryAdapterMySql implements CuentaPersistensePort {
             case RETIRO -> 2;
             case TRANSFERENCIA_OUT -> 3;
             case TRANSFERENCIA_IN -> 4;
-            case COMPRAR_TC -> 5;
+            case COMPRA_TC -> 5;
             case PAGO_TC -> 6;
             case INTERES -> 7;
         };

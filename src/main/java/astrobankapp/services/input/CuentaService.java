@@ -2,6 +2,7 @@ package astrobankapp.services.input;
 
 import astrobankapp.domain.Cliente;
 import astrobankapp.domain.Cuenta;
+import astrobankapp.domain.Movimiento;
 import astrobankapp.domain.TarjetaCredito;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface CuentaService {
     void transferirConPersistencia(Cuenta cuentaOrigen, Cuenta cuentaDestino, double monto);
     TarjetaCredito comprarConTarjetaConPersistencia(TarjetaCredito tarjeta, double monto, int cuotas);
     TarjetaCredito pagarTarjetaConPersistencia(Cuenta cuentaOrigen, TarjetaCredito tarjeta, double monto);
+    List<Movimiento> findMovimientosByNumeroCuenta(String numeroCuenta);
 }

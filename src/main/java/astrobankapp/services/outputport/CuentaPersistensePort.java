@@ -15,6 +15,7 @@ public interface CuentaPersistensePort {
     Cuenta updateCuenta(Cuenta cuenta);
     void saveMovimiento(Cuenta cuenta, Movimiento movimiento);
     void saveMovimientos(Cuenta cuenta);
+    List<Movimiento> findMovimientosByNumeroCuenta(String numeroCuenta);
     void actualizarCuentas(Cuenta cuentaOrigen, Cuenta cuentaDestino);
     void deleteCuenta(int id);
 }

@@ -88,4 +88,9 @@ public class CuentaServiceImpl implements CuentaService {
         return tarjeta;
     }
 
+    @Override
+    public List<Movimiento> findMovimientosByNumeroCuenta(String numeroCuenta) {
+        return cuentaRepository.findMovimientosByNumeroCuenta(numeroCuenta);
+    }
+
 }

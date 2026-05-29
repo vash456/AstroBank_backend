@@ -29,7 +29,7 @@ public class TarjetaCredito extends Cuenta{
         this.numeroCuotas = cuotas;
 
         registrarMovimiento(new Movimiento(
-                TipoMovimiento.COMPRAR_TC, monto, this.deuda,
+                TipoMovimiento.COMPRA_TC, monto, this.deuda,
                 "Compra con tarjeta: $" + String.format("%.2f", monto) + " en " + cuotas + " cuotas"));
 
         if (totalIntereses > 0) {

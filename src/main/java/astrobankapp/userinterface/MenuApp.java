@@ -59,9 +59,7 @@ public class MenuApp {
                     try {
                         Cliente cliente = clienteView.autenticar();
                         cliente.setCuentas(cuentaView.buscarCuentasPorCliente(cliente.getId()));
-                        System.out.println("funciona");
                         session.start(cliente);
-                        System.out.println("funciona 2");
                         mostrarMenuCliente();
                     }catch (ValidationException e) {
                         // Aquí capturas cualquiera de las excepciones porque todas heredan de ValidationException
@@ -296,9 +294,16 @@ public class MenuApp {
                 case 7:
                     try {
                         System.out.println("Consultar Movimientos:");
-                        Cuenta cuentaSeleccionada = seleccionarCuenta((ArrayList<Cuenta>) cliente.getCuentas(),true);
-                        for (Movimiento m:cuentaSeleccionada.obtenerMovimientos()){
-                            System.out.println(m);
+                        Cuenta cuentaSeleccionada = seleccionarCuenta((ArrayList<Cuenta>) cliente.getCuentas(),false);
+                        if (cuentaSeleccionada == null) break;
+                        // Recuperar movimientos desde la base de datos
+                        List<Movimiento> movimientos = cuentaView.obtenerMovimientosPorNumeroCuenta(cuentaSeleccionada.getNumeroCuenta());
+                        if (movimientos.isEmpty()) {
+                            System.out.println("No se encontraron movimientos para la cuenta.");
+                        } else {
+                            for (Movimiento m : movimientos) {
+                                System.out.println(m);
+                            }
                         }
                     }catch (ValidationException e) {
                         System.out.println("Error de validación: " + e.getMessage() + " ❌");
