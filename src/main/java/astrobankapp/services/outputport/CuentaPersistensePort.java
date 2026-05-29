@@ -12,5 +12,6 @@ public interface CuentaPersistensePort {
     Optional<Cuenta> findCuentaByNumeroCuenta(String numeroCuenta);
     List<Cuenta> findCuentasByClienteId(int clienteId);
     Cuenta updateCuenta(Cuenta cuenta);
+    void actualizarCuentas(Cuenta cuentaOrigen, Cuenta cuentaDestino);
     void deleteCuenta(int id);
 }

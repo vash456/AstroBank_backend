@@ -157,14 +157,20 @@ public class MenuApp {
                     try {
                         System.out.println("Transferir:");
                         Cuenta cuentaSeleccionada = seleccionarCuenta((ArrayList<Cuenta>) cliente.getCuentas(),true);
+                        if (cuentaSeleccionada == null) {
+                            break;
+                        }
                         System.out.println("Cuenta Destino");
                         Cuenta cuentaDestino = cuentaView.buscarPorNumeroCuenta();
                         double monto = FormularioValidacion.validateDouble("Ingrese el monto:");
-                        cuentaSeleccionada.transferir(cuentaDestino,monto);
+                        cuentaView.transferirDinero(cuentaSeleccionada, cuentaDestino, monto);
+                        System.out.printf("Transferencia exitosa.%nSaldo origen (%s): %.2f%nSaldo destino (%s): %.2f%n",
+                                cuentaSeleccionada.getNumeroCuenta(), cuentaSeleccionada.consultarSaldo(),
+                                cuentaDestino.getNumeroCuenta(), cuentaDestino.consultarSaldo());
                     }catch (ValidationException e) {
                         System.out.println("Error de validación: " + e.getMessage() + " ❌");
                     } catch (Exception e) {
-                        System.out.println("Error inesperado del sistema. ❌");
+                        System.out.println("Error inesperado del sistema. ❌" + e.getMessage());
                     }
                     break;
 

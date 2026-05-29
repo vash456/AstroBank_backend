@@ -18,6 +18,7 @@ public class CuentaAhorros extends Cuenta{
 
     public void aplicarIntereses(){
         double intereses = calcularIntereses();
+        System.out.println("Intereses aplicados (tasa: " + tasaInteres + ") = " + intereses);
         this.saldo += intereses;
         registrarMovimiento(new Movimiento(
                 TipoMovimiento.INTERES, intereses, saldo,

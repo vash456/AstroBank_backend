@@ -38,4 +38,6 @@ public class CuentaView {
     public Cuenta retirarDinero(Cuenta cuenta, double monto) {
         return this.cuentaService.retirarConPersistencia(cuenta, monto);
     }
-}
+    public void transferirDinero(Cuenta cuentaOrigen, Cuenta cuentaDestino, double monto) {
+        this.cuentaService.transferirConPersistencia(cuentaOrigen, cuentaDestino, monto);
+    }}

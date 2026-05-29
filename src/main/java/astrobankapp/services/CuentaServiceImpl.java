@@ -65,4 +65,10 @@ public class CuentaServiceImpl implements CuentaService {
         return cuentaRepository.updateCuenta(cuenta);
     }
 
+    @Override
+    public void transferirConPersistencia(Cuenta cuentaOrigen, Cuenta cuentaDestino, double monto) {
+        cuentaOrigen.transferir(cuentaDestino, monto);
+        cuentaRepository.actualizarCuentas(cuentaOrigen, cuentaDestino);
+    }
+
 }

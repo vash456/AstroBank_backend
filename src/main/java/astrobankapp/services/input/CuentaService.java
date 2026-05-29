@@ -11,4 +11,5 @@ public interface CuentaService {
     void initializeCuentasCliente(Cliente cliente);
     Cuenta consignarConPersistencia(Cuenta cuenta, double monto);
     Cuenta retirarConPersistencia(Cuenta cuenta, double monto);
+    void transferirConPersistencia(Cuenta cuentaOrigen, Cuenta cuentaDestino, double monto);
 }

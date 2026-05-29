@@ -150,6 +150,38 @@ public class CuentaRepositoryAdapterMySql implements CuentaPersistensePort {
     }
 
     @Override
+    public void actualizarCuentas(Cuenta cuentaOrigen, Cuenta cuentaDestino) {
+        boolean originalAutoCommit;
+        try {
+            originalAutoCommit = connection.getAutoCommit();
+            connection.setAutoCommit(false);
+            updateCuentaFields(cuentaOrigen);
+            updateSubclassData(cuentaOrigen);
+            updateCuentaFields(cuentaDestino);
+            updateSubclassData(cuentaDestino);
+            connection.commit();
+        } catch (SQLException e) {
+            rollbackSilently();
+            throw new RuntimeException("Error al actualizar cuentas en transferencia", e);
+        } finally {
+            restoreAutoCommit();
+        }
+    }
+
+    private void updateCuentaFields(Cuenta cuenta) throws SQLException {
+        String sql = "UPDATE cuenta SET saldo = ?, estado_cuenta_id = ? WHERE numero_cuenta = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setDouble(1, cuenta.consultarSaldo());
+            ps.setInt(2, mapEstadoCuentaId(cuenta.getEstadoCuenta()));
+            ps.setString(3, cuenta.getNumeroCuenta());
+            int updatedRows = ps.executeUpdate();
+            if (updatedRows == 0) {
+                throw new SQLException("No se encontró la cuenta para actualizar");
+            }
+        }
+    }
+
+    @Override
     public void deleteCuenta(int id) {
         String sql = "DELETE FROM cuenta WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
