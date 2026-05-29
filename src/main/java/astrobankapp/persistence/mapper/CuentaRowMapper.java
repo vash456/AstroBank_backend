@@ -5,6 +5,7 @@ import astrobankapp.domain.Cuenta;
 import astrobankapp.domain.CuentaAhorros;
 import astrobankapp.domain.CuentaCorriente;
 import astrobankapp.domain.TarjetaCredito;
+import astrobankapp.domain.Movimiento;
 import astrobankapp.domain.enums.EstadoCuenta;
 import astrobankapp.exception.AuthenticationException;
 import astrobankapp.services.outputport.ClientePersistencePort;
@@ -14,6 +15,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CuentaRowMapper implements RowMapper<Cuenta>{
     private final Connection connection;
@@ -51,6 +54,7 @@ public class CuentaRowMapper implements RowMapper<Cuenta>{
         }
 
         cuenta.setFechaApertura(fechaApertura);
+        cuenta.setMovimientos(loadMovimientos(cuentaId));
         return cuenta;
     }
 
@@ -88,5 +92,21 @@ public class CuentaRowMapper implements RowMapper<Cuenta>{
             }
         }
         throw new RuntimeException("No se encontró la entrada de tarjeta de crédito para cuenta_id=" + cuentaId);
+    }
+
+    private ArrayList<Movimiento> loadMovimientos(int cuentaId) throws SQLException {
+        String sql = "SELECT m.id, tm.nombre AS tipo_nombre, m.valor, m.saldo_posterior, m.descripcion, m.fecha_hora " +
+                     "FROM movimiento m INNER JOIN tipo_movimiento tm ON m.tipo_movimiento_id = tm.id " +
+                     "WHERE m.cuenta_id = ? ORDER BY m.fecha_hora ASC";
+        ArrayList<Movimiento> movimientos = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, cuentaId);
+            ResultSet rs = ps.executeQuery();
+            MovimientoRowMapper movimientoRowMapper = new MovimientoRowMapper();
+            while (rs.next()) {
+                movimientos.add(movimientoRowMapper.mapRow(rs));
+            }
+        }
+        return movimientos;
     }
 }

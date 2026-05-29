@@ -19,6 +19,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import astrobankapp.domain.Movimiento;
+import astrobankapp.persistence.mapper.MovimientoRowMapper;
+import astrobankapp.domain.enums.TipoMovimiento;
 
 public class CuentaRepositoryAdapterMySql implements CuentaPersistensePort {
     private final Connection connection;
@@ -138,6 +141,7 @@ public class CuentaRepositoryAdapterMySql implements CuentaPersistensePort {
                     throw new SQLException("No se encontró la cuenta para actualizar");
                 }
                 updateSubclassData(cuenta);
+                saveMovimientos(cuenta);
             }
             connection.commit();
         } catch (SQLException e) {
@@ -150,6 +154,55 @@ public class CuentaRepositoryAdapterMySql implements CuentaPersistensePort {
     }
 
     @Override
+    public void saveMovimiento(Cuenta cuenta, Movimiento movimiento) {
+        String sql = "INSERT INTO movimiento (cuenta_id, tipo_movimiento_id, valor, saldo_posterior, descripcion, cuenta_destino_id) " +
+                     "VALUES ((SELECT id FROM cuenta WHERE numero_cuenta = ?), ?, ?, ?, ?, ?)";
+        boolean originalAutoCommit = false;
+        boolean manageTransaction = false;
+        try {
+            originalAutoCommit = connection.getAutoCommit();
+            manageTransaction = originalAutoCommit;
+            if (manageTransaction) {
+                connection.setAutoCommit(false);
+            }
+            try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                ps.setString(1, cuenta.getNumeroCuenta());
+                ps.setInt(2, mapTipoMovimientoId(movimiento.getTipo()));
+                ps.setDouble(3, movimiento.getValor());
+                ps.setDouble(4, movimiento.getSaldoPosterior());
+                ps.setString(5, movimiento.getDescripcion());
+                ps.setObject(6, null);
+                ps.executeUpdate();
+                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        movimiento.setId(generatedKeys.getInt(1));
+                        movimiento.setPersisted(true);
+                    }
+                }
+            }
+            if (manageTransaction) {
+                connection.commit();
+            }
+        } catch (SQLException e) {
+            rollbackSilently();
+            throw new RuntimeException("Error al guardar el movimiento", e);
+        } finally {
+            if (manageTransaction) {
+                restoreAutoCommit();
+            }
+        }
+    }
+
+    @Override
+    public void saveMovimientos(Cuenta cuenta) {
+        for (Movimiento movimiento : cuenta.getMovimientos()) {
+            if (!movimiento.isPersisted()) {
+                saveMovimiento(cuenta, movimiento);
+            }
+        }
+    }
+
+    @Override
     public void actualizarCuentas(Cuenta cuentaOrigen, Cuenta cuentaDestino) {
         boolean originalAutoCommit;
         try {
@@ -159,6 +212,8 @@ public class CuentaRepositoryAdapterMySql implements CuentaPersistensePort {
             updateSubclassData(cuentaOrigen);
             updateCuentaFields(cuentaDestino);
             updateSubclassData(cuentaDestino);
+            saveMovimientos(cuentaOrigen);
+            saveMovimientos(cuentaDestino);
             connection.commit();
         } catch (SQLException e) {
             rollbackSilently();
@@ -258,6 +313,18 @@ public class CuentaRepositoryAdapterMySql implements CuentaPersistensePort {
             return;
         }
         throw new IllegalArgumentException("No se puede actualizar el tipo de cuenta: " + cuenta.getClass().getSimpleName());
+    }
+
+    private int mapTipoMovimientoId(TipoMovimiento tipoMovimiento) {
+        return switch (tipoMovimiento) {
+            case CONSIGNACION -> 1;
+            case RETIRO -> 2;
+            case TRANSFERENCIA_OUT -> 3;
+            case TRANSFERENCIA_IN -> 4;
+            case COMPRAR_TC -> 5;
+            case PAGO_TC -> 6;
+            case INTERES -> 7;
+        };
     }
 
     private int mapEstadoCuentaId(EstadoCuenta estadoCuenta) {

@@ -12,6 +12,7 @@ public class Movimiento {
     private double valor;
     private double saldoPosterior;
     private String descripcion;
+    private boolean persisted;
 
     // Contador estático para generar IDs únicos automáticamente
     private static int contadorId = 1;
@@ -24,6 +25,18 @@ public class Movimiento {
         this.valor = valor;
         this.saldoPosterior = saldoPosterior;
         this.descripcion = descripcion;
+        this.persisted = false;
+    }
+
+    public Movimiento(int id, TipoMovimiento tipo, double valor,
+                      double saldoPosterior, String descripcion, String fechaHora) {
+        this.id = id;
+        this.fechaHora = fechaHora;
+        this.tipo = tipo;
+        this.valor = valor;
+        this.saldoPosterior = saldoPosterior;
+        this.descripcion = descripcion;
+        this.persisted = true;
     }
 
     public int getId() { return id; }
@@ -32,6 +45,9 @@ public class Movimiento {
     public double getValor() { return valor; }
     public double getSaldoPosterior() { return saldoPosterior; }
     public String getDescripcion() { return descripcion; }
+    public boolean isPersisted() { return persisted; }
+    public void setPersisted(boolean persisted) { this.persisted = persisted; }
+    public void setId(int id) { this.id = id; }
 
     @Override
     public String toString() {

@@ -24,6 +24,7 @@ INSERT INTO tipo_movimiento (nombre) VALUES
     ('TRANSFERENCIA_IN'),
     ('COMPRA_TC'),
     ('PAGO_TC');
+    -- ('INTERES');
 
 -- --------------------------------------------------------
 
