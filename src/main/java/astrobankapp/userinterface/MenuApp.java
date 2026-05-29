@@ -96,7 +96,8 @@ public class MenuApp {
                 6. Pagar tarjeta
                 7. Consultar Movimientos
                 8. Ver perfil
-                9. Cerrar Sesion""");
+                9. Cambiar contraseña
+                10. Cerrar Sesion""" );
             int opcionCliente = FormularioValidacion.validateInt("> ");
 
             switch (opcionCliente){
@@ -317,6 +318,18 @@ public class MenuApp {
                     break;
 
                 case 9:
+                    try {
+                        System.out.println("Cambiar contraseña:");
+                        cliente = clienteView.cambiarContrasena(cliente);
+                        System.out.println("Contraseña cambiada con éxito. ✅");
+                    } catch (ValidationException e) {
+                        System.out.println("Error de validación: " + e.getMessage() + " ❌");
+                    } catch (Exception e) {
+                        System.out.println("Error inesperado del sistema. ❌" + e.getMessage());
+                    }
+                    break;
+
+                case 10:
                     System.out.println("Cerrando sesión...");
                     session.end();
                     initCliente = 0;

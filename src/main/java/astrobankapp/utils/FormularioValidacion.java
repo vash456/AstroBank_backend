@@ -106,6 +106,21 @@ public class FormularioValidacion {
         // All validations passed
     }
 
+    public static void validatePasswordChange(String currentPassword, String newPassword, String confirmPassword) {
+        if (currentPassword == null || currentPassword.isEmpty()) {
+            throw new FieldRequiredException("Contraseña actual");
+        }
+        if (newPassword == null || newPassword.isEmpty()) {
+            throw new FieldRequiredException("Nueva contraseña");
+        }
+        if (newPassword.length() < 6) {
+            throw new ValidationException("La nueva contraseña debe tener al menos 6 caracteres.");
+        }
+        if (!newPassword.equals(confirmPassword)) {
+            throw new PasswordMismatchException();
+        }
+    }
+
     public static void validateLoginForm(String user, String password) {
         if (user == null || user.isEmpty()) throw new FieldRequiredException("Usuario");
         if (password == null || password.isEmpty()) throw new FieldRequiredException("Contraseña");

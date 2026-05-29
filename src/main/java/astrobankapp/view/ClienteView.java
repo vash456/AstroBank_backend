@@ -35,4 +35,11 @@ public class ClienteView {
         return cliente;
     }
 
+    public Cliente cambiarContrasena(Cliente cliente) {
+        String actual = FormularioValidacion.validateString("Ingrese la contraseña actual:");
+        String nueva = FormularioValidacion.validateString("Ingrese la nueva contraseña:");
+        String confirmar = FormularioValidacion.validateString("Confirme la nueva contraseña:");
+        return clienteService.cambiarContrasena(cliente, actual, nueva, confirmar);
+    }
+
 }

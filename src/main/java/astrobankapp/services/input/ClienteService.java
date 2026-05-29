@@ -11,6 +11,7 @@ public interface ClienteService {
     public Cliente updateCliente(int id);
     public void deleteCliente(int id);
     public Cliente authenticate(String username, String password);
+    public Cliente cambiarContrasena(Cliente cliente, String actual, String nueva, String confirmar);
     Optional<Cliente> findClienteByUsername(String username);
 
 }

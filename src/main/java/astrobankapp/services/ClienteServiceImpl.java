@@ -1,13 +1,11 @@
 package astrobankapp.services;
 
 import astrobankapp.domain.*;
-import astrobankapp.domain.enums.EstadoCuenta;
 import astrobankapp.exception.AuthenticationException;
 import astrobankapp.services.input.ClienteService;
 import astrobankapp.services.outputport.ClientePersistencePort;
 import astrobankapp.utils.FormularioValidacion;
 
-import java.time.Instant;
 import java.util.Optional;
 
 public class ClienteServiceImpl implements ClienteService {
@@ -62,14 +60,6 @@ public class ClienteServiceImpl implements ClienteService {
         String nombreCompleto = FormularioValidacion.validateString("Ingrese su nombre completo:");
 
         String usuario = FormularioValidacion.validateString("Ingrese el Usuario");
-
-        /*try {
-            clienteRepository.buscarPorUsuario(usuario);
-            throw new UserAlreadyExistsException(usuario);
-        }catch (UserNotFoundException e) {
-            // si pasa aca, el usuario está disponible.
-            System.out.println("El usuario está disponible.");
-        } */
 
         String celular = FormularioValidacion.validateString("Ingrese su celular:");
 
@@ -126,5 +116,12 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Optional<Cliente> findClienteByUsername(String username) {
         return clienteRepository.findClienteByUsername(username);
+    }
+
+    @Override
+    public Cliente cambiarContrasena(Cliente cliente, String actual, String nueva, String confirmar) {
+        FormularioValidacion.validatePasswordChange(actual, nueva, confirmar);
+        cliente.cambiarContrasena(actual, nueva);
+        return clienteRepository.updateCliente(cliente);
     }
 }

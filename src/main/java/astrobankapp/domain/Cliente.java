@@ -1,6 +1,7 @@
 package astrobankapp.domain;
 
 import astrobankapp.exception.AuthenticationException;
+import astrobankapp.exception.ValidationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,13 @@ public class Cliente implements Autenticable{
 
     @Override
     public void cambiarContrasena(String anteriorContrasena, String nuevaContrasena){
-
+        if (anteriorContrasena == null || !anteriorContrasena.equals(this.contrasena)) {
+            throw new ValidationException("La contraseña actual es incorrecta.");
+        }
+        if (nuevaContrasena == null || nuevaContrasena.length() < 6) {
+            throw new ValidationException("La nueva contraseña debe tener al menos 6 caracteres.");
+        }
+        this.contrasena = nuevaContrasena;
     }
 
     public void incrementarIntentos(){
@@ -132,7 +139,7 @@ public class Cliente implements Autenticable{
     }
 
     public int getIntentosFallidos() {
-        return intentosFallidos;
+        return this.intentosFallidos;
     }
 
     public void setIntentosFallidos(int intentosFallidos) {
