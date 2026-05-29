@@ -62,6 +62,9 @@ public class CuentaServiceImpl implements CuentaService {
     @Override
     public Cuenta retirarConPersistencia(Cuenta cuenta, double monto) {
         cuenta.retirar(monto);
+        if (cuenta instanceof CuentaAhorros cuentaAhorros) {
+            cuentaAhorros.aplicarIntereses();
+        }
         return cuentaRepository.updateCuenta(cuenta);
     }
 
@@ -75,6 +78,14 @@ public class CuentaServiceImpl implements CuentaService {
     public TarjetaCredito comprarConTarjetaConPersistencia(TarjetaCredito tarjeta, double monto, int cuotas) {
         tarjeta.comprar(monto, cuotas);
         return (TarjetaCredito) cuentaRepository.updateCuenta(tarjeta);
+    }
+
+    @Override
+    public TarjetaCredito pagarTarjetaConPersistencia(Cuenta cuentaOrigen, TarjetaCredito tarjeta, double monto) {
+        cuentaOrigen.retirar(monto);
+        tarjeta.pagar(monto);
+        cuentaRepository.actualizarCuentas(cuentaOrigen, tarjeta);
+        return tarjeta;
     }
 
 }

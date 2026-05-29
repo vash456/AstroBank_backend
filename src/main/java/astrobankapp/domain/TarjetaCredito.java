@@ -63,7 +63,22 @@ public class TarjetaCredito extends Cuenta{
         return numerador / denominador;
     }
 
-    public void pagar(double monto){}
+    public void pagar(double monto){
+        if (monto <= 0) {
+            throw new IllegalArgumentException("El monto debe ser positivo");
+        }
+        if (monto > this.deuda) {
+            throw new IllegalArgumentException("El monto de pago no puede ser mayor que la deuda actual");
+        }
+
+        this.deuda -= monto;
+        registrarMovimiento(new Movimiento(
+                TipoMovimiento.PAGO_TC, monto, this.deuda,
+                "Pago de tarjeta de crédito: $" + String.format("%.2f", monto)));
+
+        System.out.println("Pago de tarjeta exitoso ✅");
+        System.out.printf("Monto pagado: $%.2f | Deuda restante: $%.2f%n", monto, this.deuda);
+    }
 
     public TarjetaCredito(String numeroCuenta, Cliente propietario, EstadoCuenta estadoCuenta, double saldo, double cupo, double deuda, int numeroCuotas) {
         super(numeroCuenta, propietario, estadoCuenta, saldo);
@@ -94,6 +109,7 @@ public class TarjetaCredito extends Cuenta{
 
     @Override
     public void registrarMovimiento(Movimiento movimiento) {
+        super.registrarMovimiento(movimiento);
     }
 
     @Override

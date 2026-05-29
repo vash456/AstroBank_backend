@@ -46,4 +46,8 @@ public class CuentaView {
     public TarjetaCredito comprarConTarjeta(TarjetaCredito tarjeta, double monto, int cuotas) {
         return this.cuentaService.comprarConTarjetaConPersistencia(tarjeta, monto, cuotas);
     }
+
+    public TarjetaCredito pagarTarjeta(Cuenta cuentaOrigen, TarjetaCredito tarjeta, double monto) {
+        return this.cuentaService.pagarTarjetaConPersistencia(cuentaOrigen, tarjeta, monto);
+    }
 }

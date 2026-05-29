@@ -176,7 +176,7 @@ public class MenuApp {
 
                 case 5:
                     try {
-                        System.out.println("Comprar con tarjeta:");
+                        System.out.println("Comprar con tarjeta de credito:");
                         // Seleccionar tarjeta de crédito
                         ArrayList<Cuenta> soloTarjetas = new ArrayList<>();
                         for (Cuenta c : cliente.getCuentas()) {
@@ -244,6 +244,54 @@ public class MenuApp {
                     } catch (Exception e) {
                         System.out.println("Error inesperado del sistema. ❌" + e.getMessage());
                     }
+                    break;
+                case 6:
+                    try {
+                        System.out.println("Pagar tarjeta de credito:");
+
+                        // Seleccionar tarjeta de crédito
+                        ArrayList<Cuenta> tarjetasCredito = new ArrayList<>();
+                        for (Cuenta c : cliente.getCuentas()) {
+                            if (c instanceof TarjetaCredito) {
+                                tarjetasCredito.add(c);
+                            }
+                        }
+                        if (tarjetasCredito.isEmpty()) {
+                            System.out.println("⚠ No tienes tarjetas de crédito disponibles.");
+                            break;
+                        }
+
+                        System.out.println("\nSelecciona la tarjeta de crédito:");
+                        System.out.printf("%-10s %-15s %-12s %-12s%n", "#", "Número", "Cupo", "Deuda");
+                        for (int i = 0; i < tarjetasCredito.size(); i++) {
+                            TarjetaCredito tc = (TarjetaCredito) tarjetasCredito.get(i);
+                            System.out.printf("%-10d %-15s $%-11.2f $%-11.2f%n",
+                                    i + 1, tc.getNumeroCuenta(), tc.getCupo(), tc.getDeuda());
+                        }
+                        int opcionTarjeta = FormularioValidacion.validateInt("> ");
+                        if (opcionTarjeta < 1 || opcionTarjeta > tarjetasCredito.size()) {
+                            System.out.println("Opción inválida.");
+                            break;
+                        }
+                        TarjetaCredito tarjetaSeleccionada = (TarjetaCredito) tarjetasCredito.get(opcionTarjeta - 1);
+
+                        // Seleccionar cuenta para pagar
+                        Cuenta cuentaPago = seleccionarCuenta((ArrayList<Cuenta>) cliente.getCuentas(), true);
+                        if (cuentaPago == null) {
+                            break;
+                        }
+
+                        double montoPago = FormularioValidacion.validateDouble("Ingrese el monto de pago: ");
+                        TarjetaCredito tarjetaActualizada = cuentaView.pagarTarjeta(cuentaPago, tarjetaSeleccionada, montoPago);
+                        System.out.printf("Pago exitoso.%nSaldo cuenta de pago (%s): %.2f%nDeuda tarjeta (%s): %.2f%n",
+                                cuentaPago.getNumeroCuenta(), cuentaPago.consultarSaldo(),
+                                tarjetaActualizada.getNumeroCuenta(), tarjetaActualizada.getDeuda());
+                    } catch (ValidationException e) {
+                        System.out.println("Error de validación: " + e.getMessage() + " ❌");
+                    } catch (Exception e) {
+                        System.out.println("Error inesperado del sistema. ❌" + e.getMessage());
+                    }
+
                     break;
                 case 7:
                     try {

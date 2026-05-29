@@ -14,4 +14,5 @@ public interface CuentaService {
     Cuenta retirarConPersistencia(Cuenta cuenta, double monto);
     void transferirConPersistencia(Cuenta cuentaOrigen, Cuenta cuentaDestino, double monto);
     TarjetaCredito comprarConTarjetaConPersistencia(TarjetaCredito tarjeta, double monto, int cuotas);
+    TarjetaCredito pagarTarjetaConPersistencia(Cuenta cuentaOrigen, TarjetaCredito tarjeta, double monto);
 }
