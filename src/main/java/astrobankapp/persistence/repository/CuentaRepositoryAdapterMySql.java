@@ -171,7 +171,8 @@ public class CuentaRepositoryAdapterMySql implements CuentaPersistensePort {
                 ps.setDouble(3, movimiento.getValor());
                 ps.setDouble(4, movimiento.getSaldoPosterior());
                 ps.setString(5, movimiento.getDescripcion());
-                ps.setObject(6, null);
+                // Use setNull para asegurar compatibilidad con drivers JDBC al insertar NULL
+                ps.setNull(6, java.sql.Types.INTEGER);
                 ps.executeUpdate();
                 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
